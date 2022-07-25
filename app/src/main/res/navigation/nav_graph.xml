@@ -9,5 +9,14 @@
         android:id="@+id/topFragment"
         android:name="xyz.miyayu.android.weatherapp.TopFragment"
         android:label="top_fragment"
-        tools:layout="@layout/top_fragment" />
+        tools:layout="@layout/top_fragment">
+        <action
+            android:id="@+id/open_setting"
+            app:destination="@id/settingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="xyz.miyayu.android.weatherapp.SettingFragment"
+        android:label="setting_fragment"
+        tools:layout="@layout/setting_fragment" />
 </navigation>
