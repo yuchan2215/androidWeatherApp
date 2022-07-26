@@ -2,9 +2,10 @@ package xyz.miyayu.android.weatherapp.viewModel.setting
 
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
+import xyz.miyayu.android.weatherapp.data.SettingDao
 import java.util.*
 
-class SettingListViewModel : ViewModel() {
+class SettingListViewModel(private val settingDao: SettingDao) : ViewModel() {
 
     private val _listItems =
         MutableLiveData<List<ListData>>(arrayListOf(ListData("APIキー"), ListData("地域の設定")))
@@ -34,3 +35,13 @@ class SettingListViewModel : ViewModel() {
 }
 
 data class ListData(val title: String, var value: String = "")
+
+class SettingListViewModelFactory(private val settingDao: SettingDao):ViewModelProvider.Factory{
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if(modelClass.isAssignableFrom(SettingListViewModel::class.java)){
+            @Suppress("UNCHECKED_CAST")
+            return SettingListViewModel(settingDao) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
