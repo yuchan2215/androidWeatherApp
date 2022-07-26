@@ -17,7 +17,7 @@ import xyz.miyayu.android.weatherapp.data.Setting
 import xyz.miyayu.android.weatherapp.databinding.ApiInputFragmentBinding
 import xyz.miyayu.android.weatherapp.databinding.TopFragmentBinding
 
-class ApiKeyInputFragment : Fragment(),TextWatcher {
+class ApiKeyInputFragment : Fragment(), TextWatcher, View.OnClickListener {
     private var _binding: ApiInputFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -29,18 +29,10 @@ class ApiKeyInputFragment : Fragment(),TextWatcher {
     ): View {
         _binding = ApiInputFragmentBinding.inflate(inflater, container, false).apply {
             itemKey.addTextChangedListener(this@ApiKeyInputFragment)
-            saveBtn.isEnabled = false
-            saveBtn.setOnClickListener {
-                // テキストをデータベースに格納する。
-                val inputText = binding.itemKey.text.toString()
-                CoroutineScope(Dispatchers.IO).launch {
-                    (activity?.application as WeatherApplication).database.settingDao().insert(
-                        Setting(API_KEY_COL,inputText)
-                    )
-                }
-                //戻る
-                view?.findNavController()
-                    ?.navigate(ApiKeyInputFragmentDirections.backToSetting())
+
+            saveBtn.apply {
+                isEnabled = false
+                setOnClickListener(this@ApiKeyInputFragment)
             }
         }
         return binding.root
@@ -55,5 +47,18 @@ class ApiKeyInputFragment : Fragment(),TextWatcher {
      */
     override fun afterTextChanged(s: Editable?) {
         binding.saveBtn.isEnabled = s?.isNotEmpty() ?: false
+    }
+
+    override fun onClick(v: View?) {
+        // テキストをデータベースに格納する
+        val inputText = binding.itemKey.text.toString()
+        CoroutineScope(Dispatchers.IO).launch {
+            (activity?.application as WeatherApplication).database.settingDao().insert(
+                Setting(API_KEY_COL, inputText)
+            )
+        }
+        //戻る
+        view?.findNavController()
+            ?.navigate(ApiKeyInputFragmentDirections.backToSetting())
     }
 }

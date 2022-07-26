@@ -50,9 +50,9 @@ class SettingFragment : Fragment() {
         _listViewModelFactory = SettingListViewModelFactory(dataSource) {
             view?.findNavController()?.navigate(SettingFragmentDirections.openApiKeyInput())
         }
+
         _listViewModel =
             ViewModelProvider(this, _listViewModelFactory)[SettingListViewModel::class.java]
-
-        _listViewModel.observe(this)
+                .apply { observe(this@SettingFragment) }
     }
 }
