@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listData"
+            type="xyz.miyayu.android.weatherapp.viewModel.setting.ListData" />
+
+        <variable
+            name="settingData"
+            type="xyz.miyayu.android.weatherapp.viewModel.setting.SettingListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/list_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/setting_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@{listData.title}"
+            android:textAppearance="?attr/textAppearanceListItem"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="設定のアイテム" />
+
+        <TextView
+            android:id="@+id/setting_item_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@{listData.value}"
+            android:textAppearance="?attr/textAppearanceListItemSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/setting_item"
+            app:layout_constraintTop_toBottomOf="@+id/setting_item"
+            tools:text="説明ほげほげ" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
