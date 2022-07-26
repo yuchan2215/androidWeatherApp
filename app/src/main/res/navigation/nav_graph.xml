@@ -29,7 +29,7 @@
         android:label="api_input_fragment"
         tools:layout="@layout/api_input_fragment" >
         <action
-            android:id="@+id/action_apiKeyInputFragment_to_settingFragment"
+            android:id="@+id/backToSetting"
             app:destination="@id/settingFragment"
             app:popUpTo="@id/settingFragment"
             app:popUpToInclusive="true" />

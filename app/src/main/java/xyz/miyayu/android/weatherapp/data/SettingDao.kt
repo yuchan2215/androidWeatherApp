@@ -1,5 +1,6 @@
 package xyz.miyayu.android.weatherapp.data
 
+import androidx.annotation.Nullable
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
@@ -14,6 +15,6 @@ interface SettingDao {
     @Delete
     fun delete(setting: Setting)
 
-    @Query("SELECT * from setting WHERE name = :apiKey")
-    fun getItem(apiKey: String = API_KEY_COL): Flow<Setting>
+    @Query("SELECT * from setting WHERE name = :col")
+    fun getItem(col: String = API_KEY_COL): Flow<Setting>
 }

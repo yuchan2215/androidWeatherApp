@@ -2,10 +2,8 @@ package xyz.miyayu.android.weatherapp.viewModel.setting
 
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import androidx.navigation.NavigatorProvider
-import androidx.navigation.navigation
+import xyz.miyayu.android.weatherapp.data.Setting
 import xyz.miyayu.android.weatherapp.data.SettingDao
-import java.util.*
 
 class SettingListViewModel(settingDao: SettingDao, apiKeyTapEvent: () -> Unit) : ViewModel() {
 
@@ -19,18 +17,16 @@ class SettingListViewModel(settingDao: SettingDao, apiKeyTapEvent: () -> Unit) :
     val listItems: LiveData<List<ListData>>
         get() = _listItems
 
-    private val _apiKey = MutableLiveData<String>("")
-    val apiKey: LiveData<String>
-        get() = _apiKey
+    private val apiKey: LiveData<Setting> = settingDao.getItem().asLiveData()
 
     //observeをすることでAPIキー等の変更が反映される。
     fun observe(owner: LifecycleOwner) {
-        val apiKeyObserver = Observer<String> {
+        val apiKeyObserver = Observer<Setting> { setting ->
             _listItems.value = _listItems.value.apply {
-                this!![0].value = it
+                this!![0].value = setting?.value ?: ""
             }
         }
-        _apiKey.observe(owner, apiKeyObserver)
+        apiKey.observe(owner, apiKeyObserver)
     }
 
 

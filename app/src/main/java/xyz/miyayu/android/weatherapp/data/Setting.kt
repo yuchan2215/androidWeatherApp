@@ -9,5 +9,5 @@ const val API_KEY_COL = "apiKey"
 data class Setting(
     @PrimaryKey(autoGenerate = false)
     val name: String,
-    val value: String
+    val value: String?
 )
