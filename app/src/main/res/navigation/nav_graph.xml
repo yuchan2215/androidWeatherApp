@@ -18,5 +18,20 @@
         android:id="@+id/settingFragment"
         android:name="xyz.miyayu.android.weatherapp.SettingFragment"
         android:label="setting_fragment"
-        tools:layout="@layout/setting_fragment" />
+        tools:layout="@layout/setting_fragment" >
+        <action
+            android:id="@+id/openApiKeyInput"
+            app:destination="@id/apiKeyInputFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/apiKeyInputFragment"
+        android:name="xyz.miyayu.android.weatherapp.ApiKeyInputFragment"
+        android:label="api_input_fragment"
+        tools:layout="@layout/api_input_fragment" >
+        <action
+            android:id="@+id/action_apiKeyInputFragment_to_settingFragment"
+            app:destination="@id/settingFragment"
+            app:popUpTo="@id/settingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

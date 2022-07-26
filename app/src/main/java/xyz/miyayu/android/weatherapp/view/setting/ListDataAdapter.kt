@@ -28,7 +28,7 @@ class ListDataAdapter(private val listViewModel: SettingListViewModel) : BaseAda
             listData = listDataList[position]
             settingData = listViewModel
             listItem.setOnClickListener {
-                listViewModel.updateItem()
+                (listData as ListData).tapEvent.invoke()
             }
             executePendingBindings()
         }

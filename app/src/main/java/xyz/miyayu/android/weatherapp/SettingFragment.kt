@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import xyz.miyayu.android.weatherapp.data.SettingRoomDatabase
 import xyz.miyayu.android.weatherapp.databinding.SettingFragmentBinding
 import xyz.miyayu.android.weatherapp.view.setting.ListDataAdapter
@@ -46,9 +47,12 @@ class SettingFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val dataSource = (activity?.application as WeatherApplication).database.settingDao()
 
-        _listViewModelFactory = SettingListViewModelFactory(dataSource)
+        _listViewModelFactory = SettingListViewModelFactory(dataSource) {
+            view?.findNavController()?.navigate(SettingFragmentDirections.openApiKeyInput())
+        }
         _listViewModel =
             ViewModelProvider(this, _listViewModelFactory)[SettingListViewModel::class.java]
+
         _listViewModel.observe(this)
     }
 }
