@@ -3,4 +3,9 @@
     <string name="open_setting">Setting</string>
     <string name="api_key_req">API Key <font color="#FF0000">*</font></string>
     <string name="save_btn">Save</string>
+    <string name="delete_area_title">Delete the area</string>
+    <string name="add_area_title">Add the area</string>
+    <string name="add_area_hint">Area name</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
 </resources>
