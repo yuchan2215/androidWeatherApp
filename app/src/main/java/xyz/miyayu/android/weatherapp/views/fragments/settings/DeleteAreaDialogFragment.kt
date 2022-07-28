@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp
+package xyz.miyayu.android.weatherapp.views.fragments.settings
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -8,7 +8,9 @@ import androidx.fragment.app.DialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import xyz.miyayu.android.weatherapp.data.Area
+import xyz.miyayu.android.weatherapp.R
+import xyz.miyayu.android.weatherapp.WeatherApplication
+import xyz.miyayu.android.weatherapp.model.entity.Area
 import java.lang.IllegalStateException
 
 class DeleteAreaDialogFragment(private val area: Area) : DialogFragment() {

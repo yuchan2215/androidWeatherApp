@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp
+package xyz.miyayu.android.weatherapp.views.fragments.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import xyz.miyayu.android.weatherapp.data.SettingRoomDatabase
+import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.SettingFragmentBinding
-import xyz.miyayu.android.weatherapp.view.setting.ListDataAdapter
+import xyz.miyayu.android.weatherapp.views.adapters.ListDataAdapter
 import xyz.miyayu.android.weatherapp.viewModel.setting.SettingListViewModel
 import xyz.miyayu.android.weatherapp.viewModel.setting.SettingListViewModelFactory
 

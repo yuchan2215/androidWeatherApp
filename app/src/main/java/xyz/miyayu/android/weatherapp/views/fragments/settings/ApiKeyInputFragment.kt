@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp
+package xyz.miyayu.android.weatherapp.views.fragments.settings
 
 import android.os.Bundle
 import android.text.Editable
@@ -7,15 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import xyz.miyayu.android.weatherapp.data.API_KEY_COL
-import xyz.miyayu.android.weatherapp.data.Setting
+import xyz.miyayu.android.weatherapp.WeatherApplication
+import xyz.miyayu.android.weatherapp.model.entity.API_KEY_COL
+import xyz.miyayu.android.weatherapp.model.entity.Setting
 import xyz.miyayu.android.weatherapp.databinding.ApiInputFragmentBinding
-import xyz.miyayu.android.weatherapp.databinding.TopFragmentBinding
 
 class ApiKeyInputFragment : Fragment(), TextWatcher, View.OnClickListener {
     private var _binding: ApiInputFragmentBinding? = null

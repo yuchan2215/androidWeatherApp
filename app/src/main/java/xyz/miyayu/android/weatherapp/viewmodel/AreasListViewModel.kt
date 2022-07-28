@@ -2,8 +2,8 @@ package xyz.miyayu.android.weatherapp.viewModel.setting
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import xyz.miyayu.android.weatherapp.data.Area
-import xyz.miyayu.android.weatherapp.data.AreaDao
+import xyz.miyayu.android.weatherapp.model.entity.Area
+import xyz.miyayu.android.weatherapp.model.dao.AreaDao
 
 class AreasListViewModel(private val areaDao: AreaDao): ViewModel() {
     val allAreas: LiveData<List<Area>> = areaDao.getItems().asLiveData()

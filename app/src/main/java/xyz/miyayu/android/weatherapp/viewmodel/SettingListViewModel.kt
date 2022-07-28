@@ -2,8 +2,8 @@ package xyz.miyayu.android.weatherapp.viewModel.setting
 
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import xyz.miyayu.android.weatherapp.data.Setting
-import xyz.miyayu.android.weatherapp.data.SettingDao
+import xyz.miyayu.android.weatherapp.model.entity.Setting
+import xyz.miyayu.android.weatherapp.model.dao.SettingDao
 
 class SettingListViewModel(
     settingDao: SettingDao,

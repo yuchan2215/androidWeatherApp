@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp.view.setting
+package xyz.miyayu.android.weatherapp.views.adapters
 
 import android.view.LayoutInflater
 import android.view.View

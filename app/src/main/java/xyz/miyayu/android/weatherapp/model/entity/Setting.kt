@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp.data
+package xyz.miyayu.android.weatherapp.model.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

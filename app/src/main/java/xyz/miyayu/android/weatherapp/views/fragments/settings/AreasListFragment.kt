@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp
+package xyz.miyayu.android.weatherapp.views.fragments.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
+import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
 import xyz.miyayu.android.weatherapp.viewModel.setting.AreasListViewModel
 import xyz.miyayu.android.weatherapp.viewModel.setting.AreasListViewModelFactory

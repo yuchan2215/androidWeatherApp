@@ -1,8 +1,9 @@
-package xyz.miyayu.android.weatherapp.data
+package xyz.miyayu.android.weatherapp.model.dao
 
-import androidx.annotation.Nullable
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import xyz.miyayu.android.weatherapp.model.entity.API_KEY_COL
+import xyz.miyayu.android.weatherapp.model.entity.Setting
 
 @Dao
 interface SettingDao {

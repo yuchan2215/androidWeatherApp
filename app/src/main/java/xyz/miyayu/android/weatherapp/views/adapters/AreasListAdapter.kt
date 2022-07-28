@@ -1,11 +1,11 @@
-package xyz.miyayu.android.weatherapp
+package xyz.miyayu.android.weatherapp.views.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import xyz.miyayu.android.weatherapp.data.Area
+import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.databinding.AreaListItemBinding
 
 class AreasListAdapter(private val onItemClicked: (Area) -> Unit) :

@@ -1,7 +1,8 @@
-package xyz.miyayu.android.weatherapp.data
+package xyz.miyayu.android.weatherapp.model.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import xyz.miyayu.android.weatherapp.model.entity.Area
 
 @Dao
 interface AreaDao {

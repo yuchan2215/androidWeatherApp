@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp
+package xyz.miyayu.android.weatherapp.views.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
