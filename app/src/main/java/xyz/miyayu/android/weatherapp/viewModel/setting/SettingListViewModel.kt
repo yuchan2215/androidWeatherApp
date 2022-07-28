@@ -5,13 +5,17 @@ import androidx.lifecycle.Observer
 import xyz.miyayu.android.weatherapp.data.Setting
 import xyz.miyayu.android.weatherapp.data.SettingDao
 
-class SettingListViewModel(settingDao: SettingDao, apiKeyTapEvent: () -> Unit) : ViewModel() {
+class SettingListViewModel(
+    settingDao: SettingDao,
+    apiKeyTapEvent: () -> Unit,
+    areasTapEvent: () -> Unit
+) : ViewModel() {
 
     private val _listItems =
         MutableLiveData<List<ListData>>(
             arrayListOf(
                 ListData("APIキー", tapEvent = apiKeyTapEvent),
-                ListData("地域の設定")
+                ListData("地域の設定", tapEvent = areasTapEvent)
             )
         )
     val listItems: LiveData<List<ListData>>
@@ -36,12 +40,13 @@ data class ListData(val title: String, var value: String = "", val tapEvent: () 
 
 class SettingListViewModelFactory(
     private val settingDao: SettingDao,
-    private val apiKeyTapEvent: () -> Unit
+    private val apiKeyTapEvent: () -> Unit,
+    private val areasTapEvent: () -> Unit,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SettingListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return SettingListViewModel(settingDao, apiKeyTapEvent) as T
+            return SettingListViewModel(settingDao, apiKeyTapEvent,areasTapEvent) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

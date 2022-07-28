@@ -47,9 +47,14 @@ class SettingFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val dataSource = (activity?.application as WeatherApplication).database.settingDao()
 
-        _listViewModelFactory = SettingListViewModelFactory(dataSource) {
-            view?.findNavController()?.navigate(SettingFragmentDirections.openApiKeyInput())
-        }
+        _listViewModelFactory = SettingListViewModelFactory(
+            settingDao = dataSource,
+            apiKeyTapEvent = {
+                view?.findNavController()?.navigate(SettingFragmentDirections.openApiKeyInput())
+            },
+            areasTapEvent = {
+                view?.findNavController()?.navigate(SettingFragmentDirections.actionSettingFragmentToAreasListFragment())
+            })
 
         _listViewModel =
             ViewModelProvider(this, _listViewModelFactory)[SettingListViewModel::class.java]
