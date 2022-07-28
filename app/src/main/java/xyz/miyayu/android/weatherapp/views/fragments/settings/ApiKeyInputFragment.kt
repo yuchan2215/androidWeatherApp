@@ -12,7 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import xyz.miyayu.android.weatherapp.WeatherApplication
-import xyz.miyayu.android.weatherapp.model.entity.API_KEY_COL
 import xyz.miyayu.android.weatherapp.model.entity.Setting
 import xyz.miyayu.android.weatherapp.databinding.ApiInputFragmentBinding
 
@@ -53,7 +52,7 @@ class ApiKeyInputFragment : Fragment(), TextWatcher, View.OnClickListener {
         val inputText = binding.itemKey.text.toString()
         CoroutineScope(Dispatchers.IO).launch {
             (activity?.application as WeatherApplication).database.settingDao().insert(
-                Setting(API_KEY_COL, inputText)
+                Setting(value = inputText)
             )
         }
         //戻る
