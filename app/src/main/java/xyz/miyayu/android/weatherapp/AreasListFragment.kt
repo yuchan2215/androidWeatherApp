@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
 import xyz.miyayu.android.weatherapp.viewModel.setting.AreasListViewModel
@@ -24,7 +25,7 @@ class AreasListFragment : Fragment() {
     ): View {
         val dataSource = (activity?.application as WeatherApplication).database.areaDao()
         val viewModelFactory = AreasListViewModelFactory(dataSource)
-        viewModel = ViewModelProvider(this,viewModelFactory)[AreasListViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[AreasListViewModel::class.java]
 
         _binding = AreaListFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -36,6 +37,12 @@ class AreasListFragment : Fragment() {
             //TODO タップされた時の処理
         }
         binding.areaRecyclerView.adapter = adapter
+        binding.areaRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
         viewModel.allAreas.observe(this.viewLifecycleOwner) { items ->
             items.let {
                 adapter.submitList(it)
