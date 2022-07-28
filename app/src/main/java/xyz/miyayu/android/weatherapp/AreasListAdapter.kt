@@ -13,7 +13,9 @@ class AreasListAdapter(private val onItemClicked: (Area) -> Unit) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaViewHolder {
         return AreaViewHolder(
             AreaListItemBinding.inflate(
-                LayoutInflater.from(parent.context)
+                LayoutInflater.from(parent.context),
+                parent,
+                false
             )
         )
     }

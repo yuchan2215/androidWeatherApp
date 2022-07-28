@@ -33,23 +33,29 @@ class AreasListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = AreasListAdapter {
-            //TODO タップされた時の処理
+        val listAdapter = AreasListAdapter {
+            //削除確認を開く
+            DeleteAreaDialogFragment(it).show(childFragmentManager, "Check")
         }
-        binding.areaRecyclerView.adapter = adapter
-        binding.areaRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(),
-                DividerItemDecoration.VERTICAL
-            )
-        )
+
+        with(binding) {
+            //追加ボタンの処理
+            addLocationBtn.setOnClickListener {
+                EnterAreaDialogFragment().show(childFragmentManager, "add")
+            }
+            areaRecyclerView.apply {
+                adapter = listAdapter
+                addItemDecoration(
+                    DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+                )
+                layoutManager = LinearLayoutManager(this@AreasListFragment.context)
+            }
+
+        }
         viewModel.allAreas.observe(this.viewLifecycleOwner) { items ->
             items.let {
-                adapter.submitList(it)
+                listAdapter.submitList(it)
             }
         }
-        binding.areaRecyclerView.layoutManager = LinearLayoutManager(this.context)
     }
-
-
 }
