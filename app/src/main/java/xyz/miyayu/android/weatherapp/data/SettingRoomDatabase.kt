@@ -1,13 +1,20 @@
 package xyz.miyayu.android.weatherapp.data
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Setting::class], version = 1, exportSchema = true)
+@Database(
+    entities = [Setting::class, Area::class], version = 2, exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ]
+)
 abstract class SettingRoomDatabase : RoomDatabase() {
     abstract fun settingDao(): SettingDao
+    abstract fun areaDao(): AreaDao
 
     companion object {
         @Volatile
