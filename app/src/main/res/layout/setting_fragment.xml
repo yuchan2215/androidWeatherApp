@@ -8,7 +8,7 @@
 
         <variable
             name="listViewModel"
-            type="xyz.miyayu.android.weatherapp.viewModel.setting.SettingListViewModel" />
+            type="xyz.miyayu.android.weatherapp.viewmodel.SettingListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

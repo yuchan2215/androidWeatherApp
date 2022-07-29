@@ -12,42 +12,43 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import xyz.miyayu.android.weatherapp.WeatherApplication
-import xyz.miyayu.android.weatherapp.model.entity.Setting
 import xyz.miyayu.android.weatherapp.databinding.ApiInputFragmentBinding
+import xyz.miyayu.android.weatherapp.model.entity.Setting
 
-class ApiKeyInputFragment : Fragment(), TextWatcher, View.OnClickListener {
-    private var _binding: ApiInputFragmentBinding? = null
-    private val binding get() = _binding!!
-
+/**
+ * APIキーを入力するためのフラグメント。
+ */
+class ApiKeyInputFragment : Fragment() {
+    private lateinit var binding: ApiInputFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ApiInputFragmentBinding.inflate(inflater, container, false).apply {
-            itemKey.addTextChangedListener(this@ApiKeyInputFragment)
-
-            saveBtn.apply {
-                isEnabled = false
-                setOnClickListener(this@ApiKeyInputFragment)
-            }
-        }
+        binding = ApiInputFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
     /**
-     * テキストが含まれるならセーブボタンを有効化する
+     * 入力の変更の監視
+     * セーブボタンの処理の定義
      */
-    override fun afterTextChanged(s: Editable?) {
-        binding.saveBtn.isEnabled = s?.isNotEmpty() ?: false
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        with(binding) {
+            itemKey.addTextChangedListener(textChangeListener)
+
+            saveBtn.apply {
+                isEnabled = false
+                setOnClickListener(saveButtonListener)
+            }
+        }
     }
 
-    override fun onClick(v: View?) {
+    /**
+     * セーブボタンが押された時に、データを追加して前の画面に戻る。
+     */
+    private val saveButtonListener = View.OnClickListener {
         // テキストをデータベースに格納する
         val inputText = binding.itemKey.text.toString()
         CoroutineScope(Dispatchers.IO).launch {
@@ -58,5 +59,17 @@ class ApiKeyInputFragment : Fragment(), TextWatcher, View.OnClickListener {
         //戻る
         view?.findNavController()
             ?.navigate(ApiKeyInputFragmentDirections.backToSetting())
+    }
+
+    /**
+     * テキストの変更を監視し、セーブボタンの有効状態を変化させる。
+     */
+    private val textChangeListener = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            binding.saveBtn.isEnabled = s?.isNotEmpty() ?: false
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }
 }

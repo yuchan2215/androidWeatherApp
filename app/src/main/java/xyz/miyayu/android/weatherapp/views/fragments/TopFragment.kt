@@ -8,21 +8,28 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import xyz.miyayu.android.weatherapp.databinding.TopFragmentBinding
 
+/**
+ * トップ画面のフラグメント
+ */
 class TopFragment : Fragment() {
-    private var _binding: TopFragmentBinding? = null
-    private val binding get() = _binding!!
-
+    private lateinit var binding: TopFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = TopFragmentBinding.inflate(inflater, container, false)
-
-        binding.settingButton.setOnClickListener {
-            view?.findNavController()?.navigate(TopFragmentDirections.openSetting())
-        }
+        binding = TopFragmentBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    /**
+     * 設定ボタンがタップされたら設定画面に推移する。
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.settingButton.setOnClickListener {
+            view.findNavController().navigate(TopFragmentDirections.openSetting())
+        }
     }
 }

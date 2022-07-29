@@ -5,59 +5,91 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.SettingFragmentBinding
-import xyz.miyayu.android.weatherapp.views.adapters.ListDataAdapter
-import xyz.miyayu.android.weatherapp.viewModel.setting.SettingListViewModel
-import xyz.miyayu.android.weatherapp.viewModel.setting.SettingListViewModelFactory
+import xyz.miyayu.android.weatherapp.model.entity.Setting
+import xyz.miyayu.android.weatherapp.viewmodel.SettingListViewModel
+import xyz.miyayu.android.weatherapp.viewmodel.SettingListViewModelFactory
+import xyz.miyayu.android.weatherapp.views.adapters.SettingListAdapter
 
+/**
+ * 設定画面のフラグメント。
+ * 設定項目はRoomから取得したデータのプレビューを表示する。
+ * TODO APIキーをショルダーハッキング等のリスク対策のために一部隠す。
+ * TODO 地域の件数を表示する
+ */
 class SettingFragment : Fragment() {
-    private var _binding: SettingFragmentBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: SettingFragmentBinding
+    private lateinit var fragmentViewModel: SettingListViewModel
 
-    private lateinit var _listViewModelFactory: SettingListViewModelFactory
-    private lateinit var _listViewModel: SettingListViewModel
-    private lateinit var _adapter: ListDataAdapter
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        //バインディングをする
-        _binding = SettingFragmentBinding.inflate(inflater, container, false).apply {
-            listViewModel = _listViewModel
-            lifecycleOwner = viewLifecycleOwner
-            lvSettingList.adapter = ListDataAdapter(listViewModel as SettingListViewModel)
-        }
-
-        _adapter = binding.lvSettingList.adapter as ListDataAdapter
-
-        //ビューモデルが更新された時の処理
-        _listViewModel.listItems.observe(viewLifecycleOwner) { list ->
-            _adapter.replaceData(list)
-        }
-
-        return binding.root
-    }
-
+    /**
+     * ViewModelの生成と設定
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val dataSource = (activity?.application as WeatherApplication).database.settingDao()
 
-        _listViewModelFactory = SettingListViewModelFactory(
+        val listViewModelFactory = SettingListViewModelFactory(
             settingDao = dataSource,
             apiKeyTapEvent = {
                 view?.findNavController()?.navigate(SettingFragmentDirections.openApiKeyInput())
             },
             areasTapEvent = {
-                view?.findNavController()?.navigate(SettingFragmentDirections.actionSettingFragmentToAreasListFragment())
+                view?.findNavController()
+                    ?.navigate(SettingFragmentDirections.actionSettingFragmentToAreasListFragment())
             })
 
-        _listViewModel =
-            ViewModelProvider(this, _listViewModelFactory)[SettingListViewModel::class.java]
-                .apply { observe(this@SettingFragment) }
+        fragmentViewModel =
+            ViewModelProvider(this, listViewModelFactory)[SettingListViewModel::class.java]
+                .also { it.observeList() }
+    }
+
+    /**
+     * ViewModelのデータをオブザーブし、リストのデータを更新する。
+     */
+    private fun SettingListViewModel.observeList() {
+        // 設定が変わった時にViewModelを更新するオブザーバー
+        val apiKeyObserver = Observer<Setting> { setting ->
+            val newList = listItems.value?.apply {
+                get(0).value = setting?.value ?: ""
+            } ?: throw IllegalStateException("ListItems is Empty!!")
+            replaceItems(newList)
+        }
+        // オブザーブ実行。
+        apiKey.observe(this@SettingFragment, apiKeyObserver)
+    }
+
+    /**
+     * Viewの生成
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = SettingFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    /**
+     * 各種バインディング
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            listViewModel = fragmentViewModel
+            lifecycleOwner = viewLifecycleOwner
+            lvSettingList.adapter = SettingListAdapter(listViewModel as SettingListViewModel)
+        }
+
+        val adapter = binding.lvSettingList.adapter as SettingListAdapter
+
+        //ビューモデルが更新された時の処理
+        this.fragmentViewModel.listItems.observe(viewLifecycleOwner) { list ->
+            adapter.replaceData(list)
+        }
     }
 }
