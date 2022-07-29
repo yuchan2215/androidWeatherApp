@@ -1,9 +1,8 @@
-package xyz.miyayu.android.weatherapp.viewModel.setting
+package xyz.miyayu.android.weatherapp.viewmodel
 
 import androidx.lifecycle.*
-import androidx.lifecycle.Observer
-import xyz.miyayu.android.weatherapp.data.Setting
-import xyz.miyayu.android.weatherapp.data.SettingDao
+import xyz.miyayu.android.weatherapp.model.dao.SettingDao
+import xyz.miyayu.android.weatherapp.model.entity.Setting
 
 class SettingListViewModel(
     settingDao: SettingDao,
@@ -21,19 +20,11 @@ class SettingListViewModel(
     val listItems: LiveData<List<ListData>>
         get() = _listItems
 
-    private val apiKey: LiveData<Setting> = settingDao.getItem().asLiveData()
+    val apiKey: LiveData<Setting> = settingDao.getItem().asLiveData()
 
-    //observeをすることでAPIキー等の変更が反映される。
-    fun observe(owner: LifecycleOwner) {
-        val apiKeyObserver = Observer<Setting> { setting ->
-            _listItems.value = _listItems.value.apply {
-                this!![0].value = setting?.value ?: ""
-            }
-        }
-        apiKey.observe(owner, apiKeyObserver)
+    fun replaceItems(newList: List<ListData>) {
+        _listItems.value = newList
     }
-
-
 }
 
 data class ListData(val title: String, var value: String = "", val tapEvent: () -> Unit = {})
@@ -46,7 +37,7 @@ class SettingListViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SettingListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return SettingListViewModel(settingDao, apiKeyTapEvent,areasTapEvent) as T
+            return SettingListViewModel(settingDao, apiKeyTapEvent, areasTapEvent) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

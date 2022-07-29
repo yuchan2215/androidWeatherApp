@@ -1,10 +1,14 @@
-package xyz.miyayu.android.weatherapp.data
+package xyz.miyayu.android.weatherapp.model.room
 
 import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import xyz.miyayu.android.weatherapp.model.dao.AreaDao
+import xyz.miyayu.android.weatherapp.model.dao.SettingDao
+import xyz.miyayu.android.weatherapp.model.entity.Area
+import xyz.miyayu.android.weatherapp.model.entity.Setting
 
 @Database(
     entities = [Setting::class, Area::class], version = 2, exportSchema = true,

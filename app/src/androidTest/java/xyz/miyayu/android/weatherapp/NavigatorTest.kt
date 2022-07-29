@@ -9,9 +9,9 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
+import xyz.miyayu.android.weatherapp.views.fragments.TopFragment
 
 @RunWith(AndroidJUnit4::class)
 class NavigatorTest {

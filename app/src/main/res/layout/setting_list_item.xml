@@ -5,11 +5,11 @@
 
         <variable
             name="listData"
-            type="xyz.miyayu.android.weatherapp.viewModel.setting.ListData" />
+            type="xyz.miyayu.android.weatherapp.viewmodel.ListData" />
 
         <variable
             name="settingData"
-            type="xyz.miyayu.android.weatherapp.viewModel.setting.SettingListViewModel" />
+            type="xyz.miyayu.android.weatherapp.viewmodel.SettingListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"

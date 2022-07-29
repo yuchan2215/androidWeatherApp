@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp
+package xyz.miyayu.android.weatherapp.views.fragments.settings
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -12,23 +12,17 @@ import androidx.fragment.app.DialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import xyz.miyayu.android.weatherapp.data.Area
-import java.lang.IllegalStateException
+import xyz.miyayu.android.weatherapp.R
+import xyz.miyayu.android.weatherapp.WeatherApplication
+import xyz.miyayu.android.weatherapp.model.entity.Area
 
+/**
+ * 地域を追加する画面のフラグメント。
+ * 何も入力されていない状態であればConfirmボタンを無効化する。
+ */
 class EnterAreaDialogFragment : DialogFragment(), TextWatcher {
 
-    private lateinit var editText: AppCompatEditText
     private lateinit var dialog: AlertDialog
-
-    /**
-     * 地域を追加するためのリスナー
-     */
-    private val addAreaListener = OnClickListener { _, _ ->
-        CoroutineScope(Dispatchers.IO).launch {
-            val area = Area(name = editText.editableText.toString())
-            (activity?.application as WeatherApplication).database.areaDao().insert(area)
-        }
-    }
 
     /**
      * 起動時にConfirmを無効化
@@ -40,23 +34,33 @@ class EnterAreaDialogFragment : DialogFragment(), TextWatcher {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val dialogLayout = LayoutInflater.from(requireActivity())
+        // テキストの入力フォームのレイアウト（マージンを確保するために使用）
+        val textInputLayout = LayoutInflater.from(requireActivity())
             .inflate(R.layout.layout_common_edit_dialog, null)
 
-        //ヒントの設定と、文字の更新リスナーを設定
-        editText = dialogLayout.findViewById<AppCompatEditText>(R.id.input_field)
+        // 入力フォームのView。
+        val editText = textInputLayout.findViewById<AppCompatEditText>(R.id.input_field)
             .apply {
+                //ヒントと、Confirmボタン無効化のためのリスナーを設定
                 hint = getString(R.string.add_area_hint)
                 addTextChangedListener(this@EnterAreaDialogFragment)
             }
 
+        // Confirmボタンが押された時の処理
+        val confirmListener = OnClickListener { _, _ ->
+            CoroutineScope(Dispatchers.IO).launch {
+                val area = Area(name = editText.editableText.toString())
+                (activity?.application as WeatherApplication).database.areaDao().insert(area)
+            }
+        }
 
+        // ダイアログを作成
         return activity?.let {
             dialog = AlertDialog.Builder(it)
                 .setTitle(R.string.add_area_title)
-                .setView(dialogLayout)
-                .setNegativeButton(R.string.cancel){_,_ -> }
-                .setPositiveButton(R.string.confirm, addAreaListener)
+                .setView(textInputLayout)
+                .setNegativeButton(R.string.cancel) { _, _ -> }
+                .setPositiveButton(R.string.confirm, confirmListener)
                 .create()
             dialog
         } ?: throw IllegalStateException("Activity cannot be null")

@@ -1,13 +1,17 @@
-package xyz.miyayu.android.weatherapp
+package xyz.miyayu.android.weatherapp.views.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import xyz.miyayu.android.weatherapp.data.Area
 import xyz.miyayu.android.weatherapp.databinding.AreaListItemBinding
+import xyz.miyayu.android.weatherapp.model.entity.Area
 
+/**
+ * 地域一覧のアダプター。
+ * タップされた時の処理は引数にて指定する。
+ */
 class AreasListAdapter(private val onItemClicked: (Area) -> Unit) :
     ListAdapter<Area, AreasListAdapter.AreaViewHolder>(DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaViewHolder {
@@ -22,7 +26,7 @@ class AreasListAdapter(private val onItemClicked: (Area) -> Unit) :
 
     override fun onBindViewHolder(holder: AreaViewHolder, position: Int) {
         val current = getItem(position)
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             onItemClicked(current)
         }
         holder.bind(current)
@@ -36,8 +40,9 @@ class AreasListAdapter(private val onItemClicked: (Area) -> Unit) :
             }
         }
     }
-    companion object{
-        private val DiffCallback = object:DiffUtil.ItemCallback<Area>(){
+
+    companion object {
+        private val DiffCallback = object : DiffUtil.ItemCallback<Area>() {
             override fun areContentsTheSame(oldItem: Area, newItem: Area): Boolean {
                 return oldItem == newItem
             }
