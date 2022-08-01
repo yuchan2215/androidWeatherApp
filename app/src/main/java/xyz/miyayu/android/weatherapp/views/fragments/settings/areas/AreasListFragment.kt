@@ -17,6 +17,7 @@ import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.network.WeatherApi
+import xyz.miyayu.android.weatherapp.repositories.SettingRepository
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
 import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
@@ -56,8 +57,7 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
                     //入力が完了した時のリスナー
                     confirmListener = { areaName ->
                         lifecycleScope.launch {
-                            val apiKey = WeatherApplication.instance.database.settingDao()
-                                .getItemOnce().value ?: ""
+                            val apiKey = SettingRepository.getApiKey() ?: ""
                             runAddAreaProcess(apiKey, areaName)
                         }
                         //地域を追加するプロセスを実行する。

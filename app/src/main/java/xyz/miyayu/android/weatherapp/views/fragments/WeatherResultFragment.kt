@@ -9,9 +9,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.launch
 import xyz.miyayu.android.weatherapp.R
-import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.WeatherResultFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
+import xyz.miyayu.android.weatherapp.repositories.SettingRepository
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.WeatherViewModel
 import xyz.miyayu.android.weatherapp.views.fragments.settings.areas.DeleteAreaDialogFragment
@@ -46,9 +46,7 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
             }.show(childFragmentManager, DeleteAreaDialogFragment::class.java.name)
         }
         lifecycleScope.launch {
-
-            val apiKey = WeatherApplication.instance.database.settingDao().getItemOnce().value ?: ""
-            //天気を読み込む
+            val apiKey = SettingRepository.getApiKey()
             viewModel.getWeather(args.areaName, apiKey)
         }
 

@@ -41,7 +41,7 @@ class SettingFragment : Fragment(R.layout.setting_fragment) {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = SettingListAdapter()
-        val binding = SettingFragmentBinding.bind(view).apply {
+        SettingFragmentBinding.bind(view).apply {
             lifecycleOwner = viewLifecycleOwner
             lvSettingList.adapter = adapter
         }
