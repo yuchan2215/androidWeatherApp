@@ -6,9 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import xyz.miyayu.android.weatherapp.R
+import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
+import xyz.miyayu.android.weatherapp.model.entity.Area
+import xyz.miyayu.android.weatherapp.network.WeatherApi
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
 import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
@@ -21,6 +30,10 @@ class AreasListFragment : Fragment() {
 
     private lateinit var binding: AreaListFragmentBinding
     private lateinit var viewModel: SettingViewModel
+
+    companion object {
+        private const val TAG = "AreaList"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +63,18 @@ class AreasListFragment : Fragment() {
         with(binding) {
             //地域を追加するフラグメントを表示する
             addLocationBtn.setOnClickListener {
-                EnterAreaDialogFragment().show(childFragmentManager, "add")
+                EnterAreaDialogFragment(
+                    //入力が完了した時のリスナー
+                    confirmListener = { areaName ->
+                        //APIキーを取得
+                        viewModel.apiKey.observe(viewLifecycleOwner) {}
+                        val apiKey = viewModel.apiKey.value?.value ?: ""
+
+                        //地域を追加するプロセスを実行する。
+                        runAddAreaProcess(apiKey, areaName)
+                    }).show(childFragmentManager, "add")
             }
+
             areaRecyclerView.apply {
                 adapter = listAdapter
                 layoutManager = LinearLayoutManager(this@AreasListFragment.context)
@@ -66,6 +89,81 @@ class AreasListFragment : Fragment() {
         viewModel.areaList.observe(this.viewLifecycleOwner) { items ->
             items.let {
                 listAdapter.submitList(it)
+            }
+        }
+    }
+
+    enum class AvailableStatus(val message: String = "") {
+        OK,
+        NG(WeatherApplication.instance.getString(R.string.area_check_notfound_message)),
+        ERROR(WeatherApplication.instance.getString(R.string.area_check_error_message)),
+        API_KEY_NOT_EXIST(WeatherApplication.instance.getString(R.string.api_key_not_found_error_message)),
+        UNAUTHORIZED(WeatherApplication.instance.getString(R.string.error_unauthorized))
+    }
+
+    /**
+     * 地域を追加する
+     */
+    private fun addArea(area: String) {
+        val areaObj = Area(name = area)
+        CoroutineScope(Dispatchers.IO).launch {
+            WeatherApplication.instance.database.areaDao().insert(areaObj)
+        }
+    }
+
+    private fun openApiKeySetting() {
+        view?.findNavController()
+            ?.navigate(AreasListFragmentDirections.toRestartApiKey())
+    }
+
+    private fun runAddAreaProcess(apiKey: String, areaName: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            when (val status = isAreaIsAvailable(apiKey, areaName)) {
+                //OKの時
+                AvailableStatus.OK -> addArea(areaName)
+                //APIキーの再設定が必要なエラーが発生した時
+                AvailableStatus.API_KEY_NOT_EXIST, AvailableStatus.UNAUTHORIZED -> {
+                    //APIキーを再設定するか尋ねるエラー
+                    AreaApiErrorDialogFragment(
+                        title = getString(R.string.api_error),
+                        message = status.message + "\n" + getString(R.string.api_resetting_question),
+                        confirmEvent = { openApiKeySetting() },
+                        neutralEvent = { addArea(areaName) }
+                    ).show(childFragmentManager, "RESET")
+                }
+                //APIキーの再設定が不要なエラーが発生した時
+                AvailableStatus.ERROR, AvailableStatus.NG -> {
+                    //エラー
+                    AreaErrorDialogFragment(
+                        title = getString(R.string.error),
+                        message = status.message,
+                        neutralEvent = { addArea(areaName) }
+                    ).show(childFragmentManager, "ALERT")
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 地域が有効かどうか確認する。
+     */
+    private suspend fun isAreaIsAvailable(apiKey: String, area: String): AvailableStatus {
+        if (apiKey.isEmpty()) {
+            return AvailableStatus.API_KEY_NOT_EXIST
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val weather = WeatherApi.retrofitService.getWeather(apiKey, area)
+                return@withContext when (weather.raw().code) {
+                    200 -> AvailableStatus.OK
+                    401 -> AvailableStatus.UNAUTHORIZED
+                    404 -> AvailableStatus.NG
+                    else -> AvailableStatus.ERROR
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return@withContext AvailableStatus.ERROR
             }
         }
     }

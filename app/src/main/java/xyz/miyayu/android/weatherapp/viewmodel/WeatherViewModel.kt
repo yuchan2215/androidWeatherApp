@@ -54,6 +54,7 @@ class WeatherViewModel(val settingDao: SettingDao) : ViewModel() {
             val loadingVisibility: Int = View.GONE,
             val resultVisibility: Int = View.GONE,
             val errorVisibility: Int = View.GONE,
+            val errorNotFoundVisibility: Int = View.GONE,
             val errorMessage: String = ""
         ) {
             NONE,
@@ -72,7 +73,7 @@ class WeatherViewModel(val settingDao: SettingDao) : ViewModel() {
                 errorMessage = WeatherApplication.instance.getString(R.string.error_unauthorized)
             ),
             NOT_FOUND(
-                errorVisibility = View.VISIBLE,
+                errorNotFoundVisibility = View.VISIBLE,
                 errorMessage = WeatherApplication.instance.getString(R.string.error_not_found)
             ),
             NETWORK_ERROR(

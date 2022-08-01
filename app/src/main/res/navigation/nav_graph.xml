@@ -49,6 +49,9 @@
             app:destination="@id/settingFragment"
             app:popUpTo="@id/settingFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/toRestartApiKey"
+            app:destination="@id/apiKeyInputFragment" />
     </fragment>
     <fragment
         android:id="@+id/weatherResult"
@@ -56,7 +59,15 @@
         android:label="weather_result_fragment"
         tools:layout="@layout/weather_result_fragment">
         <argument
-            android:name="name"
+            android:name="areaName"
             app:argType="string" />
+        <argument
+            android:name="areaId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/backTop"
+            app:destination="@id/topFragment"
+            app:popUpTo="@id/topFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
