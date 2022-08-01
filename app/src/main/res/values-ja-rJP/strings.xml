@@ -21,4 +21,11 @@
     </plurals>
     <string name="api_key_configured">設定済</string>
     <string name="api_key_not_configured">未設定</string>
+    <string name="api_error">APIキーエラー</string>
+    <string name="api_resetting_question">APIキーを再設定しますか？</string>
+    <string name="force_set">無視して追加</string>
+    <string name="yes">はい</string>
+    <string name="api_key_not_found_error_message">APIキーが設定されていません</string>
+    <string name="area_check_error_message">サーバーとの通信に失敗したため、地域が存在するかの確認ができませんでした。</string>
+    <string name="area_check_notfound_message">その地域はサーバー上に存在しません。</string>
 </resources>
