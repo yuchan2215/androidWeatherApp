@@ -8,7 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
+import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
 import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
@@ -50,7 +55,12 @@ class AreasListFragment : Fragment() {
         with(binding) {
             //地域を追加するフラグメントを表示する
             addLocationBtn.setOnClickListener {
-                EnterAreaDialogFragment().show(childFragmentManager, "add")
+                EnterAreaDialogFragment {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val area = Area(name = it)
+                        WeatherApplication.instance.database.areaDao().insert(area)
+                    }
+                }.show(childFragmentManager, "add")
             }
             areaRecyclerView.apply {
                 adapter = listAdapter

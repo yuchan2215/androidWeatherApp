@@ -9,18 +9,14 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.fragment.app.DialogFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import xyz.miyayu.android.weatherapp.R
-import xyz.miyayu.android.weatherapp.WeatherApplication
-import xyz.miyayu.android.weatherapp.model.entity.Area
 
 /**
  * 地域を追加する画面のフラグメント。
  * 何も入力されていない状態であればConfirmボタンを無効化する。
  */
-class EnterAreaDialogFragment : DialogFragment(), TextWatcher {
+class EnterAreaDialogFragment(private val confirmListener: (text: String) -> Unit) :
+    DialogFragment(), TextWatcher {
 
     private lateinit var dialog: AlertDialog
 
@@ -47,11 +43,8 @@ class EnterAreaDialogFragment : DialogFragment(), TextWatcher {
             }
 
         // Confirmボタンが押された時の処理
-        val confirmListener = OnClickListener { _, _ ->
-            CoroutineScope(Dispatchers.IO).launch {
-                val area = Area(name = editText.editableText.toString())
-                WeatherApplication.instance.database.areaDao().insert(area)
-            }
+        val clickListener = OnClickListener { _, _ ->
+            confirmListener.invoke(editText.editableText.toString())
         }
 
         // ダイアログを作成
@@ -60,7 +53,7 @@ class EnterAreaDialogFragment : DialogFragment(), TextWatcher {
                 .setTitle(R.string.add_area_title)
                 .setView(textInputLayout)
                 .setNegativeButton(R.string.cancel) { _, _ -> }
-                .setPositiveButton(R.string.confirm, confirmListener)
+                .setPositiveButton(R.string.confirm, clickListener)
                 .create()
             dialog
         } ?: throw IllegalStateException("Activity cannot be null")
