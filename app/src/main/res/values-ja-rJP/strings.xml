@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">お天気アプリ</string>
+    <string name="open_setting">設定</string>
+    <string name="save_btn">保存</string>
+    <string name="delete_area_title">地域を削除</string>
+    <string name="add_area_title">地域を追加</string>
+    <string name="add_area_hint">地域名</string>
+    <string name="cancel">キャンセル</string>
+    <string name="confirm">確認</string>
+    <string name="api_key_item">APIキー</string>
+    <string name="area_item">地域</string>
+    <string name="loading">読み込み中...</string>
+    <string name="error">エラーが発生しました</string>
+    <string name="error_unauthorized">認証に失敗しました</string>
+    <string name="error_not_found">地域が見つかりませんでした</string>
+    <string name="error_api_key_not_found">APIキーが設定されていません</string>
+    <string name="temp_display">%s度 (体感温度: %s度)</string>
+    <plurals name="api_key_existence">
+        <item quantity="other">設定済</item>
+    </plurals>
+    <plurals name="regions_preview">
+        <item quantity="other">地域：%d 件</item>
+    </plurals>
+</resources>
