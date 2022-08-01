@@ -87,7 +87,13 @@ class AreasListFragment : Fragment() {
                                     neutralEvent = areaAdd
                                 ).show(childFragmentManager, "RESET")
                             }
-                            else -> {}
+                            AvailableStatus.ERROR, AvailableStatus.NG -> {
+                                AreaErrorDialogFragment(
+                                    getString(R.string.error),
+                                    status.message,
+                                    neutralEvent = areaAdd
+                                ).show(childFragmentManager, "ALERT")
+                            }
                         }
                     }
                 }.show(childFragmentManager, "add")
@@ -112,8 +118,8 @@ class AreasListFragment : Fragment() {
 
     enum class AvailableStatus(val message: String = "") {
         OK,
-        NG,
-        ERROR,
+        NG(WeatherApplication.instance.getString(R.string.area_check_notfound_message)),
+        ERROR(WeatherApplication.instance.getString(R.string.area_check_error_message)),
         API_KEY_NOT_EXIST(WeatherApplication.instance.getString(R.string.api_key_not_found_error_message)),
         UNAUTHORIZED(WeatherApplication.instance.getString(R.string.error_unauthorized))
     }
