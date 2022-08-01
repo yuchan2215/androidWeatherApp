@@ -100,16 +100,16 @@ class AreasListFragment : Fragment() {
         OK,
         NG,
         ERROR,
-        API_KEY_NOT_EXIST(WeatherApplication.instance.getString(R.string.api_key_not_configured)),
+        API_KEY_NOT_EXIST(WeatherApplication.instance.getString(R.string.api_key_not_found_error_message)),
         UNAUTHORIZED(WeatherApplication.instance.getString(R.string.error_unauthorized))
     }
 
     /**
      * 地域を追加する
      */
-    suspend fun addArea(area: String) {
+    fun addArea(area: String) {
         val areaObj = Area(name = area)
-        withContext(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             WeatherApplication.instance.database.areaDao().insert(areaObj)
         }
     }
