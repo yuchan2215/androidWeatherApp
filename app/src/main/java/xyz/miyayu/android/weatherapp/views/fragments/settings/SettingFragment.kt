@@ -75,7 +75,11 @@ class SettingFragment : Fragment() {
         //ViewModelの値をobserveする。
         settingViewModel.apiKey.map {
             val size = it.value?.length ?: 0
-            return@map resources.getQuantityString(R.plurals.api_key_existence, size)
+            if (size == 0) {
+                return@map getString(R.string.api_key_not_configured)
+            } else {
+                return@map getString(R.string.api_key_configured)
+            }
         }.observe(viewLifecycleOwner) {
             adapter.setApiKeyPreview(it)
         }

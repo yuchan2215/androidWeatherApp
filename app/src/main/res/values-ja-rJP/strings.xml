@@ -16,10 +16,9 @@
     <string name="error_not_found">地域が見つかりませんでした</string>
     <string name="error_api_key_not_found">APIキーが設定されていません</string>
     <string name="temp_display">%s度 (体感温度: %s度)</string>
-    <plurals name="api_key_existence">
-        <item quantity="other">設定済</item>
-    </plurals>
     <plurals name="regions_preview">
         <item quantity="other">地域：%d 件</item>
     </plurals>
+    <string name="api_key_configured">設定済</string>
+    <string name="api_key_not_configured">未設定</string>
 </resources>
