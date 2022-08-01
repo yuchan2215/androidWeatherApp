@@ -56,7 +56,10 @@
         android:label="weather_result_fragment"
         tools:layout="@layout/weather_result_fragment">
         <argument
-            android:name="name"
+            android:name="areaName"
             app:argType="string" />
+        <argument
+            android:name="areaId"
+            app:argType="integer" />
     </fragment>
 </navigation>

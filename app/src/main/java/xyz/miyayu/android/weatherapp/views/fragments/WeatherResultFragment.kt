@@ -40,11 +40,11 @@ class WeatherResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.areaName.text = args.name
+        binding.areaName.text = args.areaName
         with(viewModel) {
             setting.observe(viewLifecycleOwner) { keySetting ->
                 //天気を読み込む
-                getWeather(args.name, keySetting.value)
+                getWeather(args.areaName, keySetting.value)
             }
             //読み込んだ結果を画面に表示する。
             weather.observe(viewLifecycleOwner) {
