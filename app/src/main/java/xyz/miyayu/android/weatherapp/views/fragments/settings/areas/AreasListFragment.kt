@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,12 +67,12 @@ class AreasListFragment : Fragment() {
                 EnterAreaDialogFragment(
                     //入力が完了した時のリスナー
                     confirmListener = { areaName ->
-                        //APIキーを取得
-                        viewModel.apiKey.observe(viewLifecycleOwner) {}
-                        val apiKey = viewModel.apiKey.value?.value ?: ""
-
+                        lifecycleScope.launch {
+                            val apiKey = WeatherApplication.instance.database.settingDao()
+                                .getItemOnce().value ?: ""
+                            runAddAreaProcess(apiKey, areaName)
+                        }
                         //地域を追加するプロセスを実行する。
-                        runAddAreaProcess(apiKey, areaName)
                     }).show(childFragmentManager, "add")
             }
 

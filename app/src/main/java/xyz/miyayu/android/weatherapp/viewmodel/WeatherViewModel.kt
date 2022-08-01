@@ -1,7 +1,10 @@
 package xyz.miyayu.android.weatherapp.viewmodel
 
 import android.view.View
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
@@ -10,7 +13,6 @@ import xyz.miyayu.android.weatherapp.network.WeatherApi
 import xyz.miyayu.android.weatherapp.network.json.Weather
 
 class WeatherViewModel(val settingDao: SettingDao) : ViewModel() {
-    val setting = settingDao.getItem().asLiveData()
 
     private val _status = MutableLiveData<WeatherApiStatus>(WeatherApiStatus.NONE)
     val status: LiveData<WeatherApiStatus> = _status
