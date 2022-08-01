@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
+import xyz.miyayu.android.weatherapp.network.WeatherApi
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
 import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
@@ -26,6 +28,10 @@ class AreasListFragment : Fragment() {
 
     private lateinit var binding: AreaListFragmentBinding
     private lateinit var viewModel: SettingViewModel
+
+    companion object {
+        private const val TAG = "AreaList"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +62,19 @@ class AreasListFragment : Fragment() {
             //地域を追加するフラグメントを表示する
             addLocationBtn.setOnClickListener {
                 EnterAreaDialogFragment {
+                    //APIキーを取得
+                    viewModel.apiKey.observe(viewLifecycleOwner) {}
+                    val apiKey = viewModel.apiKey.value?.value ?: ""
+
+                    //地域が存在すれば地域を追加する
                     CoroutineScope(Dispatchers.IO).launch {
-                        val area = Area(name = it)
-                        WeatherApplication.instance.database.areaDao().insert(area)
+                        val status = isAreaIsAvailable(apiKey, it)
+                        when (status) {
+                            AvailableStatus.OK -> {
+                                addArea(it)
+                            }
+                            else -> {}
+                        }
                     }
                 }.show(childFragmentManager, "add")
             }
@@ -80,6 +96,14 @@ class AreasListFragment : Fragment() {
         }
     }
 
+    enum class AvailableStatus {
+        OK,
+        NG,
+        ERROR,
+        API_KEY_NOT_EXIST,
+        UNAUTHORIZED
+    }
+
     /**
      * 地域を追加する
      */
@@ -91,4 +115,26 @@ class AreasListFragment : Fragment() {
     }
 
 
+    /**
+     * 地域が有効かどうか確認する。
+     */
+    suspend fun isAreaIsAvailable(apiKey: String, area: String): AvailableStatus {
+        if (apiKey.isEmpty()) {
+            return AvailableStatus.API_KEY_NOT_EXIST
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val weather = WeatherApi.retrofitService.getWeather(apiKey, area)
+                return@withContext when (weather.raw().code) {
+                    200 -> AvailableStatus.OK
+                    401 -> AvailableStatus.UNAUTHORIZED
+                    404 -> AvailableStatus.NG
+                    else -> AvailableStatus.ERROR
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return@withContext AvailableStatus.ERROR
+            }
+        }
+    }
 }
