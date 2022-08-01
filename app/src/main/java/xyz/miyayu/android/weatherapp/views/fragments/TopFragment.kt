@@ -47,7 +47,11 @@ class TopFragment : Fragment() {
             view.findNavController().navigate(TopFragmentDirections.openSetting())
         }
 
-        val listAdapter = AreasListAdapter {}
+        // 地域一覧のアダプター
+        val listAdapter = AreasListAdapter { area ->
+            view.findNavController()
+                .navigate(TopFragmentDirections.actionTopFragmentToWeatherResult(area.name))
+        }
 
         binding.areaRecyclerView.apply {
             adapter = listAdapter
