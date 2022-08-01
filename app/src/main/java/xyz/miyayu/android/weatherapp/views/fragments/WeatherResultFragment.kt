@@ -32,6 +32,8 @@ class WeatherResultFragment : Fragment() {
     ): View {
         binding = WeatherResultFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
+        binding.viewmodel = viewModel
+
         return binding.root
     }
 
@@ -53,7 +55,5 @@ class WeatherResultFragment : Fragment() {
                 binding.apiStatus.text = it.toString()
             }
         }
-
-
     }
 }
