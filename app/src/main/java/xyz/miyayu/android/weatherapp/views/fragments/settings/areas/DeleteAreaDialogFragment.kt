@@ -26,8 +26,8 @@ class DeleteAreaDialogFragment(private val area: Area, private val confirmEvent:
             CoroutineScope(Dispatchers.IO).launch {
                 WeatherApplication.instance.database.areaDao()
                     .delete(area)
-                confirmEvent.invoke()
             }
+            confirmEvent.invoke()
         }
 
         return activity?.let {

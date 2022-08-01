@@ -61,5 +61,10 @@
         <argument
             android:name="areaId"
             app:argType="integer" />
+        <action
+            android:id="@+id/backTop"
+            app:destination="@id/topFragment"
+            app:popUpTo="@id/topFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
