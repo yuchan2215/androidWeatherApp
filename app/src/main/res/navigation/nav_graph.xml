@@ -13,6 +13,9 @@
         <action
             android:id="@+id/open_setting"
             app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_topFragment_to_weatherResult"
+            app:destination="@id/weatherResult" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -46,5 +49,14 @@
             app:destination="@id/settingFragment"
             app:popUpTo="@id/settingFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/weatherResult"
+        android:name="xyz.miyayu.android.weatherapp.views.fragments.WeatherResultFragment"
+        android:label="weather_result_fragment"
+        tools:layout="@layout/weather_result_fragment">
+        <argument
+            android:name="name"
+            app:argType="string" />
     </fragment>
 </navigation>
