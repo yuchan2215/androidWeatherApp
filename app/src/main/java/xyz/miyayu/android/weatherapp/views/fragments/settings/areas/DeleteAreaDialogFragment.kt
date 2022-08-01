@@ -15,7 +15,8 @@ import xyz.miyayu.android.weatherapp.model.entity.Area
 /**
  * 地域を削除するときの確認ダイアログのフラグメント。
  */
-class DeleteAreaDialogFragment(private val area: Area) : DialogFragment() {
+class DeleteAreaDialogFragment(private val area: Area, private val confirmEvent: () -> Unit = {}) :
+    DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         /**
@@ -25,6 +26,7 @@ class DeleteAreaDialogFragment(private val area: Area) : DialogFragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 WeatherApplication.instance.database.areaDao()
                     .delete(area)
+                confirmEvent.invoke()
             }
         }
 
