@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp.views.fragments.settings
+package xyz.miyayu.android.weatherapp.views.fragments.settings.areas
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
-import xyz.miyayu.android.weatherapp.viewmodel.AreasListViewModel
-import xyz.miyayu.android.weatherapp.viewmodel.AreasListViewModelFactory
+import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
+import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
 import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
 
 /**
@@ -21,14 +20,13 @@ import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
 class AreasListFragment : Fragment() {
 
     private lateinit var binding: AreaListFragmentBinding
-    private lateinit var viewModel: AreasListViewModel
+    private lateinit var viewModel: SettingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val dataSource = (activity?.application as WeatherApplication).database.areaDao()
-        val viewModelFactory = AreasListViewModelFactory(dataSource)
-        viewModel = ViewModelProvider(this, viewModelFactory)[AreasListViewModel::class.java]
+        val viewModelFactory = ViewModelFactories.getSettingViewModelFactory()
+        viewModel = ViewModelProvider(this, viewModelFactory)[SettingViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -65,7 +63,7 @@ class AreasListFragment : Fragment() {
 
         }
         //地域が更新されたらリストを更新する。
-        viewModel.allAreas.observe(this.viewLifecycleOwner) { items ->
+        viewModel.areaList.observe(this.viewLifecycleOwner) { items ->
             items.let {
                 listAdapter.submitList(it)
             }

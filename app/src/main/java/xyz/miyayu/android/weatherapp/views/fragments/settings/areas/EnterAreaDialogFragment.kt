@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp.views.fragments.settings
+package xyz.miyayu.android.weatherapp.views.fragments.settings.areas
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -50,7 +50,7 @@ class EnterAreaDialogFragment : DialogFragment(), TextWatcher {
         val confirmListener = OnClickListener { _, _ ->
             CoroutineScope(Dispatchers.IO).launch {
                 val area = Area(name = editText.editableText.toString())
-                (activity?.application as WeatherApplication).database.areaDao().insert(area)
+                WeatherApplication.instance.database.areaDao().insert(area)
             }
         }
 

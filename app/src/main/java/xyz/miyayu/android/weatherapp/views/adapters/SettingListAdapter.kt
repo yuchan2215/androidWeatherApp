@@ -5,18 +5,57 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import androidx.databinding.DataBindingUtil
+import xyz.miyayu.android.weatherapp.R
+import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.SettingListItemBinding
-import xyz.miyayu.android.weatherapp.viewmodel.ListData
-import xyz.miyayu.android.weatherapp.viewmodel.SettingListViewModel
 
 /**
- * 設定のトップ画面のアダプター。
+ * 設定画面のBaseAdapter。
+ * １段目はAPIキー
+ * ２段目は地域
  */
-class SettingListAdapter(private val listViewModel: SettingListViewModel) : BaseAdapter() {
+class SettingListAdapter : BaseAdapter() {
+    private val resources = WeatherApplication.instance.resources
+    private val itemsList = listOf(
+        //1段目(APIキー)
+        SettingItem(
+            resources.getString(R.string.api_key_item)
+        ),
+        //2段目(地域)
+        SettingItem(
+            resources.getString(R.string.area_item)
+        ),
+    )
 
-    private var listDataList: List<ListData> = listOf()
-    override fun getCount() = listDataList.size
-    override fun getItem(position: Int) = listDataList[position]
+
+    data class SettingItem(
+        val title: String,
+        var preview: String = "",
+        var tapEvent: () -> Unit = {}
+    )
+
+    fun setApiKeyPreview(str: String) {
+        itemsList[API_KEY_INDEX].preview = str
+        notifyDataSetChanged()
+    }
+
+    fun setApiKeyListener(tapEvent: () -> Unit) {
+        itemsList[API_KEY_INDEX].tapEvent = tapEvent
+        notifyDataSetChanged()
+    }
+
+    fun setAreasPreview(str: String) {
+        itemsList[AREAS_INDEX].preview = str
+        notifyDataSetChanged()
+    }
+
+    fun setAreasListener(tapEvent: () -> Unit) {
+        itemsList[AREAS_INDEX].tapEvent = tapEvent
+        notifyDataSetChanged()
+    }
+
+    override fun getCount() = itemsList.size
+    override fun getItem(position: Int) = itemsList[position]
     override fun getItemId(position: Int) = position.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -25,22 +64,20 @@ class SettingListAdapter(private val listViewModel: SettingListViewModel) : Base
             SettingListItemBinding.inflate(inflater, parent, false)
         } else {
             DataBindingUtil.getBinding(convertView) ?: throw IllegalStateException()
-        }
-
-        with(binding) {
-            listData = listDataList[position]
-            settingData = listViewModel
+        }.apply {
+            val item = itemsList[position]
             listItem.setOnClickListener {
-                (listData as ListData).tapEvent.invoke()
+                item.tapEvent.invoke()
             }
+            settingItem.text = item.title
+            settingItemPreview.text = item.preview
             executePendingBindings()
         }
         return binding.root
     }
 
-    fun replaceData(listDataList: List<ListData>) {
-        this.listDataList = listDataList
-        notifyDataSetChanged()
+    companion object {
+        private const val API_KEY_INDEX = 0
+        private const val AREAS_INDEX = 1
     }
-
 }
