@@ -79,4 +79,16 @@ class AreasListFragment : Fragment() {
             }
         }
     }
+
+    /**
+     * 地域を追加する
+     */
+    suspend fun addArea(area: String) {
+        val areaObj = Area(name = area)
+        withContext(Dispatchers.IO) {
+            WeatherApplication.instance.database.areaDao().insert(areaObj)
+        }
+    }
+
+
 }
