@@ -45,14 +45,15 @@ class WeatherResultFragment : Fragment() {
                 //天気を読み込む
                 getWeather(args.name, keySetting.value)
             }
+            //読み込んだ結果を画面に表示する。
             weather.observe(viewLifecycleOwner) {
-                //天気を読み込む
-                binding.apiCode.text = it?.cod.toString()
-            }
-
-            status.observe(viewLifecycleOwner) {
-                //ステータスを読み込む
-                binding.apiStatus.text = it.toString()
+                it?.let {
+                    with(binding) {
+                        weatherType.text = it.description.firstOrNull()?.desc
+                        tempText.text = it.main.getTemp().toString()
+                        weatherType.text = it.description.firstOrNull()?.desc ?: "?"
+                    }
+                }
             }
         }
     }

@@ -12,7 +12,7 @@ import xyz.miyayu.android.weatherapp.network.json.Weather
 class WeatherViewModel(val settingDao: SettingDao) : ViewModel() {
     val setting = settingDao.getItem().asLiveData()
 
-    private val _status = MutableLiveData<WeatherApiStatus>()
+    private val _status = MutableLiveData<WeatherApiStatus>(WeatherApiStatus.NONE)
     val status: LiveData<WeatherApiStatus> = _status
 
     private val _weather = MutableLiveData<Weather>()
@@ -56,6 +56,7 @@ class WeatherViewModel(val settingDao: SettingDao) : ViewModel() {
             val errorVisibility: Int = View.GONE,
             val errorMessage: String = ""
         ) {
+            NONE,
             LOADING(loadingVisibility = View.VISIBLE),
             DONE(resultVisibility = View.VISIBLE),
             ERROR(
