@@ -6,8 +6,8 @@ import kotlinx.coroutines.launch
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.model.dao.SettingDao
-import xyz.miyayu.android.weatherapp.network.Weather
 import xyz.miyayu.android.weatherapp.network.WeatherApi
+import xyz.miyayu.android.weatherapp.network.json.Weather
 
 class WeatherViewModel(val settingDao: SettingDao) : ViewModel() {
     val setting = settingDao.getItem().asLiveData()
