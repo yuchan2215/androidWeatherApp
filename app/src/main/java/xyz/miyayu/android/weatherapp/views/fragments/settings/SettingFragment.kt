@@ -13,7 +13,7 @@ import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.SettingFragmentBinding
 import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
 import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModelFactory
-import xyz.miyayu.android.weatherapp.views.adapters.NewSettingListAdapter
+import xyz.miyayu.android.weatherapp.views.adapters.SettingListAdapter
 
 /**
  * 設定画面のフラグメント。
@@ -23,7 +23,7 @@ import xyz.miyayu.android.weatherapp.views.adapters.NewSettingListAdapter
  */
 class SettingFragment : Fragment() {
     private lateinit var binding: SettingFragmentBinding
-    private lateinit var adapter: NewSettingListAdapter
+    private lateinit var adapter: SettingListAdapter
     private lateinit var settingViewModel: SettingViewModel
 
     /**
@@ -61,7 +61,7 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = NewSettingListAdapter()
+        adapter = SettingListAdapter()
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             lvSettingList.adapter = adapter
