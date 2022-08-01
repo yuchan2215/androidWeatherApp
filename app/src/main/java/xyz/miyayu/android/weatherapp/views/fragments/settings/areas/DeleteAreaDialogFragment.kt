@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp.views.fragments.settings
+package xyz.miyayu.android.weatherapp.views.fragments.settings.areas
 
 import android.app.AlertDialog
 import android.app.Dialog

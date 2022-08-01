@@ -19,18 +19,20 @@ class SettingListAdapter : BaseAdapter() {
     private val itemsList = listOf(
         //1段目(APIキー)
         SettingItem(
-            resources.getString(R.string.api_key_item),
-            ""
+            resources.getString(R.string.api_key_item)
         ),
         //2段目(地域)
         SettingItem(
-            resources.getString(R.string.area_item),
-            ""
+            resources.getString(R.string.area_item)
         ),
     )
 
 
-    data class SettingItem(val title: String, var preview: String, var tapEvent: () -> Unit = {})
+    data class SettingItem(
+        val title: String,
+        var preview: String = "",
+        var tapEvent: () -> Unit = {}
+    )
 
     fun setApiKeyPreview(str: String) {
         itemsList[API_KEY_INDEX].preview = str

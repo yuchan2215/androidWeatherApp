@@ -18,7 +18,7 @@
         android:id="@+id/settingFragment"
         android:name="xyz.miyayu.android.weatherapp.views.fragments.settings.SettingFragment"
         android:label="setting_fragment"
-        tools:layout="@layout/setting_fragment" >
+        tools:layout="@layout/setting_fragment">
         <action
             android:id="@+id/openApiKeyInput"
             app:destination="@id/apiKeyInputFragment" />
@@ -30,7 +30,7 @@
         android:id="@+id/apiKeyInputFragment"
         android:name="xyz.miyayu.android.weatherapp.views.fragments.settings.ApiKeyInputFragment"
         android:label="api_input_fragment"
-        tools:layout="@layout/api_input_fragment" >
+        tools:layout="@layout/api_input_fragment">
         <action
             android:id="@+id/backToSetting"
             app:destination="@id/settingFragment"
@@ -39,8 +39,8 @@
     </fragment>
     <fragment
         android:id="@+id/areasListFragment"
-        android:name="xyz.miyayu.android.weatherapp.views.fragments.settings.AreasListFragment"
-        android:label="AreasListFragment" >
+        android:name="xyz.miyayu.android.weatherapp.views.fragments.settings.areas.AreasListFragment"
+        android:label="AreasListFragment">
         <action
             android:id="@+id/action_areasListFragment_to_settingFragment"
             app:destination="@id/settingFragment"

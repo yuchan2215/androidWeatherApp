@@ -72,6 +72,7 @@ class SettingFragment : Fragment() {
             }
         }
 
+        //ViewModelの値をobserveする。
         settingViewModel.apiKey.map {
             val size = it.value?.length ?: 0
             return@map resources.getQuantityString(R.plurals.api_key_existence, size)
