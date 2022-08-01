@@ -8,4 +8,6 @@
     <string name="add_area_hint">Area name</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
+    <string name="api_key_item">API Key</string>
+    <string name="area_item">Areas</string>
 </resources>
