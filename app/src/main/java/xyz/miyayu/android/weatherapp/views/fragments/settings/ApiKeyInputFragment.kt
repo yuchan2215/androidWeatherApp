@@ -52,7 +52,7 @@ class ApiKeyInputFragment : Fragment() {
         // テキストをデータベースに格納する
         val inputText = binding.itemKey.text.toString()
         CoroutineScope(Dispatchers.IO).launch {
-            (activity?.application as WeatherApplication).database.settingDao().insert(
+            WeatherApplication.instance.database.settingDao().insert(
                 Setting(value = inputText)
             )
         }

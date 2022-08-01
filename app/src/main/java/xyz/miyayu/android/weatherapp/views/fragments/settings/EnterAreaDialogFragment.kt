@@ -50,7 +50,7 @@ class EnterAreaDialogFragment : DialogFragment(), TextWatcher {
         val confirmListener = OnClickListener { _, _ ->
             CoroutineScope(Dispatchers.IO).launch {
                 val area = Area(name = editText.editableText.toString())
-                (activity?.application as WeatherApplication).database.areaDao().insert(area)
+                WeatherApplication.instance.database.areaDao().insert(area)
             }
         }
 

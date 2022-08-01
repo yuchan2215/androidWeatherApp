@@ -23,11 +23,11 @@ class DeleteAreaDialogFragment(private val area: Area) : DialogFragment() {
          */
         val confirmListener = OnClickListener { _, _ ->
             CoroutineScope(Dispatchers.IO).launch {
-                (activity?.application as WeatherApplication).database.areaDao()
+                WeatherApplication.instance.database.areaDao()
                     .delete(area)
             }
         }
-        
+
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.setMessage(area.name)
