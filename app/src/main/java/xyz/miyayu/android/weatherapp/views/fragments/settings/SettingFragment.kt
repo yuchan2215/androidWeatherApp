@@ -9,10 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.navigation.findNavController
 import xyz.miyayu.android.weatherapp.R
-import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.SettingFragmentBinding
+import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
-import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModelFactory
 import xyz.miyayu.android.weatherapp.views.adapters.SettingListAdapter
 
 /**
@@ -31,13 +30,8 @@ class SettingFragment : Fragment() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val settingDao = (activity?.application as WeatherApplication).database.settingDao()
-        val areaDao = (activity?.application as WeatherApplication).database.areaDao()
 
-        val settingViewModelFactory = SettingViewModelFactory(
-            settingDao = settingDao,
-            areaDao = areaDao
-        )
+        val settingViewModelFactory = ViewModelFactories.getSettingViewModelFactory()
 
         settingViewModel =
             ViewModelProvider(this, settingViewModelFactory)[SettingViewModel::class.java]

@@ -8,10 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
+import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
-import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModelFactory
 import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
 
 /**
@@ -26,9 +25,7 @@ class AreasListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val areaSource = (activity?.application as WeatherApplication).database.areaDao()
-        val settingSource = (activity?.application as WeatherApplication).database.settingDao()
-        val viewModelFactory = SettingViewModelFactory(settingSource, areaSource)
+        val viewModelFactory = ViewModelFactories.getSettingViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[SettingViewModel::class.java]
     }
 
