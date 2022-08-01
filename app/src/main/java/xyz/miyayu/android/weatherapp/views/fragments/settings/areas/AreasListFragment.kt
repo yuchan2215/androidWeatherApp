@@ -63,41 +63,18 @@ class AreasListFragment : Fragment() {
         with(binding) {
             //地域を追加するフラグメントを表示する
             addLocationBtn.setOnClickListener {
-                EnterAreaDialogFragment {
-                    //APIキーを取得
-                    viewModel.apiKey.observe(viewLifecycleOwner) {}
-                    val apiKey = viewModel.apiKey.value?.value ?: ""
+                EnterAreaDialogFragment(
+                    //入力が完了した時のリスナー
+                    confirmListener = { areaName ->
+                        //APIキーを取得
+                        viewModel.apiKey.observe(viewLifecycleOwner) {}
+                        val apiKey = viewModel.apiKey.value?.value ?: ""
 
-                    val areaAdd = { addArea(it) }
-                    val resettingApiKey = {
-                        view.findNavController()
-                            .navigate(AreasListFragmentDirections.toRestartApiKey())
-                    }
-
-                    //地域が存在すれば地域を追加する
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val status = isAreaIsAvailable(apiKey, it)
-                        when (status) {
-                            AvailableStatus.OK -> areaAdd.invoke()
-                            AvailableStatus.API_KEY_NOT_EXIST, AvailableStatus.UNAUTHORIZED -> {
-                                AreaApiErrorDialogFragment(
-                                    getString(R.string.api_error),
-                                    status.message + "\n" + getString(R.string.api_resetting_question),
-                                    confirmEvent = resettingApiKey,
-                                    neutralEvent = areaAdd
-                                ).show(childFragmentManager, "RESET")
-                            }
-                            AvailableStatus.ERROR, AvailableStatus.NG -> {
-                                AreaErrorDialogFragment(
-                                    getString(R.string.error),
-                                    status.message,
-                                    neutralEvent = areaAdd
-                                ).show(childFragmentManager, "ALERT")
-                            }
-                        }
-                    }
-                }.show(childFragmentManager, "add")
+                        //地域を追加するプロセスを実行する。
+                        runAddAreaProcess(apiKey, areaName)
+                    }).show(childFragmentManager, "add")
             }
+
             areaRecyclerView.apply {
                 adapter = listAdapter
                 layoutManager = LinearLayoutManager(this@AreasListFragment.context)
@@ -127,10 +104,43 @@ class AreasListFragment : Fragment() {
     /**
      * 地域を追加する
      */
-    fun addArea(area: String) {
+    private fun addArea(area: String) {
         val areaObj = Area(name = area)
         CoroutineScope(Dispatchers.IO).launch {
             WeatherApplication.instance.database.areaDao().insert(areaObj)
+        }
+    }
+
+    private fun openApiKeySetting() {
+        view?.findNavController()
+            ?.navigate(AreasListFragmentDirections.toRestartApiKey())
+    }
+
+    private fun runAddAreaProcess(apiKey: String, areaName: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            when (val status = isAreaIsAvailable(apiKey, areaName)) {
+                //OKの時
+                AvailableStatus.OK -> addArea(areaName)
+                //APIキーの再設定が必要なエラーが発生した時
+                AvailableStatus.API_KEY_NOT_EXIST, AvailableStatus.UNAUTHORIZED -> {
+                    //APIキーを再設定するか尋ねるエラー
+                    AreaApiErrorDialogFragment(
+                        title = getString(R.string.api_error),
+                        message = status.message + "\n" + getString(R.string.api_resetting_question),
+                        confirmEvent = { openApiKeySetting() },
+                        neutralEvent = { addArea(areaName) }
+                    ).show(childFragmentManager, "RESET")
+                }
+                //APIキーの再設定が不要なエラーが発生した時
+                AvailableStatus.ERROR, AvailableStatus.NG -> {
+                    //エラー
+                    AreaErrorDialogFragment(
+                        title = getString(R.string.error),
+                        message = status.message,
+                        neutralEvent = { addArea(areaName) }
+                    ).show(childFragmentManager, "ALERT")
+                }
+            }
         }
     }
 
@@ -138,7 +148,7 @@ class AreasListFragment : Fragment() {
     /**
      * 地域が有効かどうか確認する。
      */
-    suspend fun isAreaIsAvailable(apiKey: String, area: String): AvailableStatus {
+    private suspend fun isAreaIsAvailable(apiKey: String, area: String): AvailableStatus {
         if (apiKey.isEmpty()) {
             return AvailableStatus.API_KEY_NOT_EXIST
         }
