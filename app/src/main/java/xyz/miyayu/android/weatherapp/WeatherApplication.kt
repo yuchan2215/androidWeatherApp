@@ -5,7 +5,7 @@ import xyz.miyayu.android.weatherapp.model.room.SettingRoomDatabase
 
 class WeatherApplication : Application() {
     companion object {
-        lateinit var instance: Application private set
+        lateinit var instance: WeatherApplication private set
     }
 
     override fun onCreate() {
