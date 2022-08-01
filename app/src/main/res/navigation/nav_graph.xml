@@ -49,6 +49,9 @@
             app:destination="@id/settingFragment"
             app:popUpTo="@id/settingFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/toRestartApiKey"
+            app:destination="@id/apiKeyInputFragment" />
     </fragment>
     <fragment
         android:id="@+id/weatherResult"
