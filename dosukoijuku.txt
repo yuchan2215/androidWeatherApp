@@ -1,0 +1,13 @@
+Bindingは最後nullにしてあげる
+1Fragment 1ViewModel
+重複するところはabstractかinterface
+enumじゃなくてsealed classを使ってみる
+データ関連の取得はrepositoryに投げてみる
+barrier,guideline 便利！
+fragment内ならlifecycleScope
+dao系はviewModelに入れる。Viewには基本ロジックを書かない。とにかくViewModelでやってみよう
+Kotlinしりあざいざーを使ってみる
+変数名は分かりにくくなるので変に略さない
+APIキーをDBで管理する意味は？
+APIキーの漏洩に気をつけよう！
+android:foreground="?attr/selectableItemBackground"
