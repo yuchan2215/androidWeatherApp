@@ -17,11 +17,19 @@
             tools:text="地域名" />
 
         <TextView
-            android:id="@+id/api_code"
+            android:id="@+id/api_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/area_name"
+            tools:text="Code" />
+
+        <TextView
+            android:id="@+id/api_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/api_status"
             tools:text="Code" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
