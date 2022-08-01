@@ -24,6 +24,42 @@
             tools:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/notFoundError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewmodel.status.errorNotFoundVisibility}"
+            tools:layout_editor_absoluteX="147dp"
+            tools:layout_editor_absoluteY="-111dp"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.status.errorMessage}"
+                app:layout_constraintBottom_toTopOf="@+id/areaDeleteButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="NotFound" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/areaDeleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/delete_area_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{viewmodel.status.errorVisibility}"
@@ -47,7 +83,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible">
+            tools:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

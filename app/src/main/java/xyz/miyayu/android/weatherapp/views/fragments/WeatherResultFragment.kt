@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.WeatherResultFragmentBinding
+import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.WeatherViewModel
+import xyz.miyayu.android.weatherapp.views.fragments.settings.areas.DeleteAreaDialogFragment
 
 /**
  * 天気を表示するフラグメント
@@ -41,6 +43,10 @@ class WeatherResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.areaName.text = args.areaName
+        binding.areaDeleteButton.setOnClickListener {
+            val area = Area(args.areaId, args.areaName)
+            DeleteAreaDialogFragment(area).show(childFragmentManager, "Delete")
+        }
         with(viewModel) {
             setting.observe(viewLifecycleOwner) { keySetting ->
                 //天気を読み込む
