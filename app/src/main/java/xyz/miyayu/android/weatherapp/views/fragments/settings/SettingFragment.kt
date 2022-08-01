@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import androidx.lifecycle.map
+import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.SettingFragmentBinding
-import xyz.miyayu.android.weatherapp.model.entity.Setting
-import xyz.miyayu.android.weatherapp.viewmodel.SettingListViewModel
-import xyz.miyayu.android.weatherapp.viewmodel.SettingListViewModelFactory
-import xyz.miyayu.android.weatherapp.views.adapters.SettingListAdapter
+import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
+import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModelFactory
+import xyz.miyayu.android.weatherapp.views.adapters.NewSettingListAdapter
 
 /**
  * 設定画面のフラグメント。
@@ -23,43 +22,24 @@ import xyz.miyayu.android.weatherapp.views.adapters.SettingListAdapter
  */
 class SettingFragment : Fragment() {
     private lateinit var binding: SettingFragmentBinding
-    private lateinit var fragmentViewModel: SettingListViewModel
+    private lateinit var adapter: NewSettingListAdapter
+    private lateinit var settingViewModel: SettingViewModel
 
     /**
      * ViewModelの生成と設定
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val dataSource = (activity?.application as WeatherApplication).database.settingDao()
+        val settingDao = (activity?.application as WeatherApplication).database.settingDao()
+        val areaDao = (activity?.application as WeatherApplication).database.areaDao()
 
-        val listViewModelFactory = SettingListViewModelFactory(
-            settingDao = dataSource,
-            apiKeyTapEvent = {
-                view?.findNavController()?.navigate(SettingFragmentDirections.openApiKeyInput())
-            },
-            areasTapEvent = {
-                view?.findNavController()
-                    ?.navigate(SettingFragmentDirections.actionSettingFragmentToAreasListFragment())
-            })
+        val settingViewModelFactory = SettingViewModelFactory(
+            settingDao = settingDao,
+            areaDao = areaDao
+        )
 
-        fragmentViewModel =
-            ViewModelProvider(this, listViewModelFactory)[SettingListViewModel::class.java]
-                .also { it.observeList() }
-    }
-
-    /**
-     * ViewModelのデータをオブザーブし、リストのデータを更新する。
-     */
-    private fun SettingListViewModel.observeList() {
-        // 設定が変わった時にViewModelを更新するオブザーバー
-        val apiKeyObserver = Observer<Setting> { setting ->
-            val newList = listItems.value?.apply {
-                get(0).value = setting?.value ?: ""
-            } ?: throw IllegalStateException("ListItems is Empty!!")
-            replaceItems(newList)
-        }
-        // オブザーブ実行。
-        apiKey.observe(this@SettingFragment, apiKeyObserver)
+        settingViewModel =
+            ViewModelProvider(this, settingViewModelFactory)[SettingViewModel::class.java]
     }
 
     /**
@@ -79,17 +59,25 @@ class SettingFragment : Fragment() {
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = NewSettingListAdapter()
         binding.apply {
-            listViewModel = fragmentViewModel
             lifecycleOwner = viewLifecycleOwner
-            lvSettingList.adapter = SettingListAdapter(listViewModel as SettingListViewModel)
+            lvSettingList.adapter = adapter
         }
 
-        val adapter = binding.lvSettingList.adapter as SettingListAdapter
+        settingViewModel.apiKey.map {
+            val size = it.value?.length ?: 0
+            return@map resources.getQuantityString(R.plurals.api_key_existence, size)
+        }.observe(viewLifecycleOwner) {
+            adapter.setApiKeyPreview(it)
+        }
 
-        //ビューモデルが更新された時の処理
-        this.fragmentViewModel.listItems.observe(viewLifecycleOwner) { list ->
-            adapter.replaceData(list)
+        settingViewModel.areaList.map {
+            val size = it.size
+            return@map resources.getQuantityString(R.plurals.regions_preview, size, size)
+        }.observe(viewLifecycleOwner) {
+            adapter.setAreasPreview(it)
         }
     }
 }

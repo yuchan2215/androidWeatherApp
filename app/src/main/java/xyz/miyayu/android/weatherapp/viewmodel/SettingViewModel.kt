@@ -1,20 +1,22 @@
 package xyz.miyayu.android.weatherapp.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import xyz.miyayu.android.weatherapp.model.dao.AreaDao
 import xyz.miyayu.android.weatherapp.model.dao.SettingDao
 import xyz.miyayu.android.weatherapp.model.entity.Area
+import xyz.miyayu.android.weatherapp.model.entity.Setting
 
-class SettingViewModel(areaDao: AreaDao, settingDao: SettingDao) {
+class SettingViewModel(areaDao: AreaDao, settingDao: SettingDao) : ViewModel() {
     //地域一覧
     val areaList: LiveData<List<Area>> = areaDao.getItems().asLiveData()
 
-    //地域数
-    val areaCount: LiveData<Int> = areaList.map { list -> list.size }
-
     //APIキー
-    val apiKey: LiveData<String> =
-        settingDao.getItem().asLiveData().map { setting -> setting.value ?: "" }
+    val apiKey: LiveData<Setting> =
+        settingDao.getItem().asLiveData()
+
 }
 
 class SettingViewModelFactory(

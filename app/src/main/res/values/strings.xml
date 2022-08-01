@@ -10,4 +10,13 @@
     <string name="confirm">Confirm</string>
     <string name="api_key_item">API Key</string>
     <string name="area_item">Areas</string>
+    <plurals name="api_key_existence">
+        <item quantity="zero">Not Configured</item>
+        <item quantity="other">Configured</item>
+    </plurals>
+    <plurals name="regions_preview">
+        <item quantity="zero">Not Configured</item>
+        <item quantity="one">%d region</item>
+        <item quantity="other">%d regions</item>
+    </plurals>
 </resources>
