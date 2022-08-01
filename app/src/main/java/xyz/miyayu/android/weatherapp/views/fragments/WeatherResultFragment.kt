@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.WeatherResultFragmentBinding
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.WeatherViewModel
@@ -50,8 +51,10 @@ class WeatherResultFragment : Fragment() {
                 it?.let {
                     with(binding) {
                         weatherType.text = it.description.firstOrNull()?.desc
-                        tempText.text = it.main.getTemp().toString()
-                        weatherType.text = it.description.firstOrNull()?.desc ?: "?"
+                        val temp = it.main.getTemp()
+                        val feelTemp = it.main.getFeelTemp()
+                        val text = getString(R.string.temp_display, temp, feelTemp)
+                        tempText.text = text
                     }
                 }
             }
