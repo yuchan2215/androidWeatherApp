@@ -1,14 +1,13 @@
 package xyz.miyayu.android.weatherapp.views.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.TopFragmentBinding
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
@@ -17,10 +16,8 @@ import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
 /**
  * トップ画面のフラグメント
  */
-class TopFragment : Fragment() {
-    private lateinit var binding: TopFragmentBinding
+class TopFragment : Fragment(R.layout.top_fragment) {
     private lateinit var viewModel: SettingViewModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,20 +26,12 @@ class TopFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[SettingViewModel::class.java]
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = TopFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     /**
      * 設定ボタンがタップされたら設定画面に推移する。
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val binding = TopFragmentBinding.bind(view)
         binding.settingButton.setOnClickListener {
             view.findNavController().navigate(TopFragmentDirections.openSetting())
         }
