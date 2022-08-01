@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.WeatherResultFragmentBinding
@@ -45,7 +46,10 @@ class WeatherResultFragment : Fragment() {
         binding.areaName.text = args.areaName
         binding.areaDeleteButton.setOnClickListener {
             val area = Area(args.areaId, args.areaName)
-            DeleteAreaDialogFragment(area).show(childFragmentManager, "Delete")
+            //地域を削除するダイアログを表示する
+            DeleteAreaDialogFragment(area) {
+                view.findNavController().navigate(WeatherResultFragmentDirections.backTop())
+            }.show(childFragmentManager, "Delete")
         }
         with(viewModel) {
             setting.observe(viewLifecycleOwner) { keySetting ->
