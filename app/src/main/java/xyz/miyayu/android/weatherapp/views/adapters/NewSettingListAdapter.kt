@@ -30,15 +30,25 @@ class NewSettingListAdapter : BaseAdapter() {
     )
 
 
-    data class SettingItem(val title: String, var preview: String)
+    data class SettingItem(val title: String, var preview: String, var tapEvent: () -> Unit = {})
 
     fun setApiKeyPreview(str: String) {
-        itemsList[0].preview = str
+        itemsList[API_KEY_INDEX].preview = str
+        notifyDataSetChanged()
+    }
+
+    fun setApiKeyListener(tapEvent: () -> Unit) {
+        itemsList[API_KEY_INDEX].tapEvent = tapEvent
         notifyDataSetChanged()
     }
 
     fun setAreasPreview(str: String) {
-        itemsList[1].preview = str
+        itemsList[AREAS_INDEX].preview = str
+        notifyDataSetChanged()
+    }
+
+    fun setAreasListener(tapEvent: () -> Unit) {
+        itemsList[AREAS_INDEX].tapEvent = tapEvent
         notifyDataSetChanged()
     }
 
@@ -54,11 +64,18 @@ class NewSettingListAdapter : BaseAdapter() {
             DataBindingUtil.getBinding(convertView) ?: throw IllegalStateException()
         }.apply {
             val item = itemsList[position]
-
+            listItem.setOnClickListener {
+                item.tapEvent.invoke()
+            }
             settingItem.text = item.title
             settingItemPreview.text = item.preview
             executePendingBindings()
         }
         return binding.root
+    }
+
+    companion object {
+        private const val API_KEY_INDEX = 0
+        private const val AREAS_INDEX = 1
     }
 }

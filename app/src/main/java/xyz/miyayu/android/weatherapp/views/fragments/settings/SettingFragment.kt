@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
+import androidx.navigation.findNavController
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.SettingFragmentBinding
@@ -64,6 +65,17 @@ class SettingFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             lvSettingList.adapter = adapter
+        }
+
+        //タップした時の処理を追加
+        with(adapter) {
+            setAreasListener {
+                view.findNavController()
+                    .navigate(SettingFragmentDirections.actionSettingFragmentToAreasListFragment())
+            }
+            setApiKeyListener {
+                view.findNavController().navigate(SettingFragmentDirections.openApiKeyInput())
+            }
         }
 
         settingViewModel.apiKey.map {
