@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
@@ -66,12 +68,24 @@ class AreasListFragment : Fragment() {
                     viewModel.apiKey.observe(viewLifecycleOwner) {}
                     val apiKey = viewModel.apiKey.value?.value ?: ""
 
+                    val areaAdd = { addArea(it) }
+                    val resettingApiKey = {
+                        view.findNavController()
+                            .navigate(AreasListFragmentDirections.toRestartApiKey())
+                    }
+
                     //地域が存在すれば地域を追加する
                     CoroutineScope(Dispatchers.IO).launch {
                         val status = isAreaIsAvailable(apiKey, it)
                         when (status) {
-                            AvailableStatus.OK -> {
-                                addArea(it)
+                            AvailableStatus.OK -> areaAdd.invoke()
+                            AvailableStatus.API_KEY_NOT_EXIST, AvailableStatus.UNAUTHORIZED -> {
+                                AreaApiErrorDialogFragment(
+                                    getString(R.string.api_error),
+                                    status.message + "\n" + getString(R.string.api_resetting_question),
+                                    confirmEvent = resettingApiKey,
+                                    neutralEvent = areaAdd
+                                ).show(childFragmentManager, "RESET")
                             }
                             else -> {}
                         }
