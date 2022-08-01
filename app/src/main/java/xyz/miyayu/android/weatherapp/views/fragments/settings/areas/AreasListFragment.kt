@@ -96,12 +96,12 @@ class AreasListFragment : Fragment() {
         }
     }
 
-    enum class AvailableStatus {
+    enum class AvailableStatus(val message: String = "") {
         OK,
         NG,
         ERROR,
-        API_KEY_NOT_EXIST,
-        UNAUTHORIZED
+        API_KEY_NOT_EXIST(WeatherApplication.instance.getString(R.string.api_key_not_configured)),
+        UNAUTHORIZED(WeatherApplication.instance.getString(R.string.error_unauthorized))
     }
 
     /**
