@@ -119,7 +119,7 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
                         message = status.message + "\n" + getString(R.string.api_resetting_question),
                         confirmEvent = { openApiKeySetting() },
                         neutralEvent = { addArea(areaName) }
-                    ).show(childFragmentManager, "RESET")
+                    ).show(childFragmentManager, AreaApiErrorDialogFragment::class.java.name)
                 }
                 //APIキーの再設定が不要なエラーが発生した時
                 AvailableStatus.ERROR, AvailableStatus.NG -> {
@@ -128,7 +128,7 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
                         title = getString(R.string.error),
                         message = status.message,
                         neutralEvent = { addArea(areaName) }
-                    ).show(childFragmentManager, "ALERT")
+                    ).show(childFragmentManager, AreaErrorDialogFragment::class.java.name)
                 }
             }
         }
