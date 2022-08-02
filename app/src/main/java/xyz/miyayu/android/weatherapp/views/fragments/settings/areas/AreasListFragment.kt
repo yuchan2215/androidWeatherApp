@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
+import xyz.miyayu.android.weatherapp.constant.HTTPResponseCode
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.network.WeatherApi
@@ -145,9 +146,9 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
             try {
                 val weather = WeatherApi.retrofitService.getWeather(apiKey, area)
                 return@withContext when (weather.raw().code) {
-                    200 -> AvailableStatus.OK
-                    401 -> AvailableStatus.UNAUTHORIZED
-                    404 -> AvailableStatus.NG
+                    HTTPResponseCode.OK -> AvailableStatus.OK
+                    HTTPResponseCode.UNAUTHORIZED -> AvailableStatus.UNAUTHORIZED
+                    HTTPResponseCode.NOT_FOUND -> AvailableStatus.NG
                     else -> AvailableStatus.ERROR
                 }
             } catch (e: Exception) {
