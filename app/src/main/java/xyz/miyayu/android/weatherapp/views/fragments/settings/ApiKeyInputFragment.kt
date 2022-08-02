@@ -3,14 +3,13 @@ package xyz.miyayu.android.weatherapp.views.fragments.settings
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.ApiInputFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Setting
@@ -18,24 +17,16 @@ import xyz.miyayu.android.weatherapp.model.entity.Setting
 /**
  * APIキーを入力するためのフラグメント。
  */
-class ApiKeyInputFragment : Fragment() {
+class ApiKeyInputFragment : Fragment(R.layout.api_input_fragment) {
     private lateinit var binding: ApiInputFragmentBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = ApiInputFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     /**
      * 入力の変更の監視
      * セーブボタンの処理の定義
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        with(binding) {
+        binding = ApiInputFragmentBinding.bind(view).apply {
             itemKey.addTextChangedListener(textChangeListener)
 
             saveBtn.apply {

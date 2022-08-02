@@ -1,9 +1,7 @@
 package xyz.miyayu.android.weatherapp.views.fragments.settings
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
@@ -20,8 +18,7 @@ import xyz.miyayu.android.weatherapp.views.adapters.SettingListAdapter
  * TODO APIキーをショルダーハッキング等のリスク対策のために一部隠す。
  * TODO 地域の件数を表示する
  */
-class SettingFragment : Fragment() {
-    private lateinit var binding: SettingFragmentBinding
+class SettingFragment : Fragment(R.layout.setting_fragment) {
     private lateinit var adapter: SettingListAdapter
     private lateinit var settingViewModel: SettingViewModel
 
@@ -38,25 +35,13 @@ class SettingFragment : Fragment() {
     }
 
     /**
-     * Viewの生成
-     */
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = SettingFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    /**
      * 各種バインディング
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = SettingListAdapter()
-        binding.apply {
+        SettingFragmentBinding.bind(view).apply {
             lifecycleOwner = viewLifecycleOwner
             lvSettingList.adapter = adapter
         }

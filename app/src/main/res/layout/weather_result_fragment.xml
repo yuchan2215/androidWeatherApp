@@ -17,11 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <xyz.miyayu.android.weatherapp.views.custom.LoadingView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="@{viewmodel.status.loadingVisibility}"
-            tools:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/notFoundError"
@@ -167,6 +162,12 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
+
+        <xyz.miyayu.android.weatherapp.views.custom.LoadingView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewmodel.status.loadingVisibility}"
+            tools:visibility="gone" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

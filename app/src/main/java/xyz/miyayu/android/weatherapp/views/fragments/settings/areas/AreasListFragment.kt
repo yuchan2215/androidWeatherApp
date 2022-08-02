@@ -1,11 +1,10 @@
 package xyz.miyayu.android.weatherapp.views.fragments.settings.areas
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +17,7 @@ import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.network.WeatherApi
+import xyz.miyayu.android.weatherapp.repositories.SettingRepository
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
 import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
@@ -26,9 +26,7 @@ import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
  * 地域リストのフラグメント。
  * 項目をタップすると削除するかどうか尋ね、フローティングボタンをタップすると項目追加画面に推移する。
  */
-class AreasListFragment : Fragment() {
-
-    private lateinit var binding: AreaListFragmentBinding
+class AreasListFragment : Fragment(R.layout.area_list_fragment) {
     private lateinit var viewModel: SettingViewModel
 
     companion object {
@@ -42,14 +40,6 @@ class AreasListFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[SettingViewModel::class.java]
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = AreaListFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,18 +50,17 @@ class AreasListFragment : Fragment() {
                 DeleteAreaDialogFragment(it).show(childFragmentManager, "Check")
             })
 
-        with(binding) {
+        AreaListFragmentBinding.bind(view).apply {
             //地域を追加するフラグメントを表示する
             addLocationBtn.setOnClickListener {
                 EnterAreaDialogFragment(
                     //入力が完了した時のリスナー
                     confirmListener = { areaName ->
-                        //APIキーを取得
-                        viewModel.apiKey.observe(viewLifecycleOwner) {}
-                        val apiKey = viewModel.apiKey.value?.value ?: ""
-
+                        lifecycleScope.launch {
+                            val apiKey = SettingRepository.getApiKey() ?: ""
+                            runAddAreaProcess(apiKey, areaName)
+                        }
                         //地域を追加するプロセスを実行する。
-                        runAddAreaProcess(apiKey, areaName)
                     }).show(childFragmentManager, "add")
             }
 

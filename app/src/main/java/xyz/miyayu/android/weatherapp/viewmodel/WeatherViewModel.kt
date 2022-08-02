@@ -1,16 +1,18 @@
 package xyz.miyayu.android.weatherapp.viewmodel
 
 import android.view.View
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.model.dao.SettingDao
-import xyz.miyayu.android.weatherapp.network.WeatherApi
 import xyz.miyayu.android.weatherapp.network.json.Weather
+import xyz.miyayu.android.weatherapp.repositories.WeatherRepository
 
 class WeatherViewModel(val settingDao: SettingDao) : ViewModel() {
-    val setting = settingDao.getItem().asLiveData()
 
     private val _status = MutableLiveData<WeatherApiStatus>(WeatherApiStatus.NONE)
     val status: LiveData<WeatherApiStatus> = _status
@@ -18,36 +20,37 @@ class WeatherViewModel(val settingDao: SettingDao) : ViewModel() {
     private val _weather = MutableLiveData<Weather>()
     val weather: LiveData<Weather> = _weather
 
-    /**
-     * 天気をネットワーク上から取得する。
-     */
-    fun getWeather(area: String, key: String?) {
-        _status.value = WeatherApiStatus.LOADING
-        if (key == null) {
-            _status.value = WeatherApiStatus.APIKEY_NOT_SET
-            return
-        }
+    private fun setApiStatus(status: WeatherApiStatus) {
+        _status.value = status
+    }
+
+    private fun setWeather(weather: Weather) {
+        _weather.value = weather
+    }
+
+    fun updateWeather(areaName: String) {
+        setApiStatus(WeatherApiStatus.LOADING)
         viewModelScope.launch {
             try {
-                val request = WeatherApi.retrofitService.getWeather(key, area)
-                if (request.isSuccessful) {
-                    _weather.value = request.body()
-                    _status.value = WeatherApiStatus.DONE
+                val requestResponse = WeatherRepository.getWeather(areaName)
+                if (requestResponse.isSuccessful && requestResponse.body() != null) {
+                    setWeather(requestResponse.body()!!)
+                    setApiStatus(WeatherApiStatus.DONE)
                 } else {
-                    _status.value = when (request.raw().code) {
+                    val status = when (requestResponse.raw().code) {
                         401 -> WeatherApiStatus.UNAUTHORIZED
                         404 -> WeatherApiStatus.NOT_FOUND
                         else -> WeatherApiStatus.ERROR
                     }
+                    setApiStatus(status)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _status.value = WeatherApiStatus.NETWORK_ERROR
-                _weather.value = null
+                setApiStatus(WeatherApiStatus.NETWORK_ERROR)
             }
         }
-
     }
+
 
     companion object {
         enum class WeatherApiStatus(
