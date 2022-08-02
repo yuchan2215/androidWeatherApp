@@ -16,11 +16,12 @@ import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.constant.HTTPResponseCode
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
+import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.network.WeatherApi
 import xyz.miyayu.android.weatherapp.repositories.SettingRepository
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.AreaListFragmentViewModel
-import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
+import xyz.miyayu.android.weatherapp.views.adapters.AreaListAdapter
 
 /**
  * 地域リストのフラグメント。
@@ -28,7 +29,7 @@ import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
  */
 class AreasListFragment : Fragment(R.layout.area_list_fragment) {
     private lateinit var viewModel: AreaListFragmentViewModel
-    
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +42,12 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val listAdapter = AreasListAdapter(
-            onItemClicked = {
+        val listAdapter = object : AreaListAdapter() {
+            override fun onItemClicked(area: Area) {
                 //削除確認のフラグメントを表示する
-                DeleteAreaDialogFragment(it).show(childFragmentManager, "Check")
-            })
+                DeleteAreaDialogFragment(area).show(childFragmentManager, "Check")
+            }
+        }
 
         AreaListFragmentBinding.bind(view).apply {
             //地域を追加するフラグメントを表示する

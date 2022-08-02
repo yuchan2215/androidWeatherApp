@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.TopFragmentBinding
+import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.TopFragmentViewModel
-import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
+import xyz.miyayu.android.weatherapp.views.adapters.AreaListAdapter
 
 /**
  * トップ画面のフラグメント
@@ -37,14 +38,16 @@ class TopFragment : Fragment(R.layout.top_fragment) {
         }
 
         // 地域一覧のアダプター
-        val listAdapter = AreasListAdapter { area ->
-            view.findNavController()
-                .navigate(
-                    TopFragmentDirections.actionTopFragmentToWeatherResult(
-                        area.name,
-                        area.id
+        val listAdapter = object : AreaListAdapter() {
+            override fun onItemClicked(area: Area) {
+                view.findNavController()
+                    .navigate(
+                        TopFragmentDirections.actionTopFragmentToWeatherResult(
+                            area.name,
+                            area.id
+                        )
                     )
-                )
+            }
         }
 
         binding.areaRecyclerView.apply {

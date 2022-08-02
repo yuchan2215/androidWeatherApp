@@ -12,8 +12,11 @@ import xyz.miyayu.android.weatherapp.model.entity.Area
  * 地域一覧のアダプター。
  * タップされた時の処理は引数にて指定する。
  */
-class AreasListAdapter(private val onItemClicked: (Area) -> Unit) :
-    ListAdapter<Area, AreasListAdapter.AreaViewHolder>(DiffCallback) {
+abstract class AreaListAdapter :
+    ListAdapter<Area, AreaListAdapter.AreaViewHolder>(DiffCallback) {
+
+    abstract fun onItemClicked(area: Area)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaViewHolder {
         return AreaViewHolder(
             AreaListItemBinding.inflate(
