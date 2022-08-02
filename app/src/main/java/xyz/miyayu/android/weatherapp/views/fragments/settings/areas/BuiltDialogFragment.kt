@@ -6,12 +6,12 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import xyz.miyayu.android.weatherapp.utils.DialogAction
 
-abstract class BuiltDialogFragment(
+open class BuiltDialogFragment(
     private val title: String?,
     private val message: String?,
-    private val negative: DialogAction?,
-    private val neutral: DialogAction?,
-    private val positive: DialogAction?
+    private val negative: DialogAction? = null,
+    private val neutral: DialogAction? = null,
+    private val positive: DialogAction? = null
 ) : DialogFragment() {
 
 
@@ -39,5 +39,4 @@ abstract class BuiltDialogFragment(
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
-
 }
