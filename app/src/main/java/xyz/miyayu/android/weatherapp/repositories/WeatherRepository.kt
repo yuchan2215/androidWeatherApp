@@ -19,7 +19,7 @@ object WeatherRepository {
      * 天気の取得中にエラーが発生した場合は[Response.createUnknownError]を返す。
      * 何もなけれた[Response.createResponseFromRetrofit]を返す。
      */
-    suspend fun fetchWeather(areaName: String): Response<Weather> {
+    suspend fun fetchWeather(areaName: String): Response {
         return withContext(Dispatchers.IO) {
             try {
                 //APIキーを読み込む

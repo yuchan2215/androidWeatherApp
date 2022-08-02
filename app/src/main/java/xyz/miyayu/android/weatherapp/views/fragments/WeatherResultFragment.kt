@@ -57,7 +57,10 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
                 is Response.ErrorResponse -> {
                     errorBind(binding, status.errorStatus)
                 }
-                is Response.SuccessResponse -> {
+                is Response.SuccessResponse<*> -> {
+                    if (status.body !is Weather) {
+                        throw IllegalStateException("body is not Weather")
+                    }
                     successBind(binding, status.body)
                 }
             }
