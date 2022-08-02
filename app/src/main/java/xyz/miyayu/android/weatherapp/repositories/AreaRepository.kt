@@ -4,7 +4,7 @@ import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.model.entity.Area
 
 object AreaRepository {
-    fun insertArea(areaName: String) {
+    suspend fun insertArea(areaName: String) {
         val area = Area(name = areaName)
         WeatherApplication.instance.database.areaDao().insert(area)
     }

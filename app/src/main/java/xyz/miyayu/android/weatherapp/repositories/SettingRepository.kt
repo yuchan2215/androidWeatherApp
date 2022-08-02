@@ -8,6 +8,6 @@ object SettingRepository {
     }
 
     suspend fun getApiKey(): String? {
-        return application.database.settingDao().getItemOnce().value
+        return application.database.settingDao().getItem().value
     }
 }

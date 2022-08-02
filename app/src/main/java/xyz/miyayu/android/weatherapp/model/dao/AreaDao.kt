@@ -7,13 +7,13 @@ import xyz.miyayu.android.weatherapp.model.entity.Area
 @Dao
 interface AreaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(area: Area)
+    suspend fun insert(area: Area)
 
     @Update
-    fun update(area: Area)
+    suspend fun update(area: Area)
 
     @Delete
-    fun delete(area: Area)
+    suspend fun delete(area: Area)
 
     @Query("SELECT * from areas ORDER BY id ASC")
     fun getItems(): Flow<List<Area>>

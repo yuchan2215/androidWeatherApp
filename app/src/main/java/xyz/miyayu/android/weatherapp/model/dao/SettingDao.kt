@@ -9,19 +9,19 @@ import xyz.miyayu.android.weatherapp.model.entity.Setting
 interface SettingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(setting: Setting)
+    suspend fun insert(setting: Setting)
 
     @Update
-    fun update(setting: Setting)
+    suspend fun update(setting: Setting)
 
     @Delete
-    fun delete(setting: Setting)
+    suspend fun delete(setting: Setting)
 
     @Query("SELECT * from setting WHERE name = :col")
-    fun getItem(col: String = API_KEY_COL): Flow<Setting>
+    fun getItemFlow(col: String = API_KEY_COL): Flow<Setting>
 
     @Query("SELECT * from setting WHERE name = :col")
-    suspend fun getItemOnce(col: String = API_KEY_COL): Setting
+    suspend fun getItem(col: String = API_KEY_COL): Setting
 
     companion object {
         internal const val API_KEY_COL = "apiKey"

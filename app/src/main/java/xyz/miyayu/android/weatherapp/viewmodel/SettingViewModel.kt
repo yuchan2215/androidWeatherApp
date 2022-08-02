@@ -14,6 +14,6 @@ class SettingViewModel(areaDao: AreaDao, settingDao: SettingDao) : ViewModel() {
 
     //APIキー
     val apiKey: LiveData<Setting> =
-        settingDao.getItem().asLiveData()
+        settingDao.getItemFlow().asLiveData()
 
 }
