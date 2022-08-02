@@ -34,16 +34,19 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
             view,
             savedInstanceState
         )
-        val binding = WeatherResultFragmentBinding.bind(view)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewmodel = viewModel
-        binding.areaName.text = args.areaName
-        binding.areaDeleteButton.setOnClickListener {
-            val area = Area(args.areaId, args.areaName)
-            //地域を削除するダイアログを表示する
-            DeleteAreaDialogFragment(area) {
-                view.findNavController().navigate(WeatherResultFragmentDirections.backTop())
-            }.show(childFragmentManager, DeleteAreaDialogFragment::class.java.name)
+        val binding = WeatherResultFragmentBinding.bind(view).apply {
+            lifecycleOwner = viewLifecycleOwner
+            this.viewmodel = this@WeatherResultFragment.viewModel
+
+            //エリアを削除するボタンが押された時
+            areaDeleteButton.setOnClickListener {
+                val area = Area(args.areaId, args.areaName)
+                
+                //地域を削除するか尋ねるダイアログを表示する
+                DeleteAreaDialogFragment(area) {
+                    view.findNavController().navigate(WeatherResultFragmentDirections.backTop())
+                }.show(childFragmentManager, DeleteAreaDialogFragment::class.java.name)
+            }
         }
 
         viewModel.fetchWeather(args.areaName)
@@ -93,6 +96,7 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
         val feelTemp = weather.main.getFeelTemp()
         val text = getString(R.string.temp_display, temp, feelTemp)
 
+        binding.areaName.text = args.areaName
         binding.tempText.text = text
         binding.weatherType.text = weather.description.firstOrNull()?.desc.orEmpty()
         binding.resultView.visibility = View.VISIBLE
