@@ -8,4 +8,8 @@ object AreaRepository {
         val area = Area(name = areaName)
         WeatherApplication.instance.database.areaDao().insert(area)
     }
+
+    suspend fun deleteArea(area: Area) {
+        WeatherApplication.instance.database.areaDao().delete(area)
+    }
 }

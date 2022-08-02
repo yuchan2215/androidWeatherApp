@@ -28,4 +28,5 @@
     <string name="api_key_not_found_error_message">APIキーが設定されていません</string>
     <string name="area_check_error_message">サーバーとの通信に失敗したため、地域が存在するかの確認ができませんでした。</string>
     <string name="area_check_notfound_message">その地域はサーバー上に存在しません。</string>
+    <string name="delete">削除</string>
 </resources>

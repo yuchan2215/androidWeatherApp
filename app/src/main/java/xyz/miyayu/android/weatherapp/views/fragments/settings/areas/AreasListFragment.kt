@@ -1,5 +1,6 @@
 package xyz.miyayu.android.weatherapp.views.fragments.settings.areas
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.network.WeatherApi
 import xyz.miyayu.android.weatherapp.repositories.SettingRepository
+import xyz.miyayu.android.weatherapp.utils.DialogAction
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.AreaListFragmentViewModel
 import xyz.miyayu.android.weatherapp.views.adapters.AreaListAdapter
@@ -43,9 +45,23 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
         super.onViewCreated(view, savedInstanceState)
 
         val listAdapter = object : AreaListAdapter() {
+            //項目が選択された時
             override fun onItemClicked(area: Area) {
-                //削除確認のフラグメントを表示する
-                DeleteAreaDialogFragment(area).show(childFragmentManager, "Check")
+                //削除ボタンのアクション
+                val deleteDialogAction = object : DialogAction {
+                    override val buttonText: String
+                        get() = getString(R.string.delete)
+
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        viewModel.deleteArea(area)
+                    }
+                }
+                //ダイアログを表示する
+                BuiltDialogFragment(
+                    title = getString(R.string.delete_area_title),
+                    message = null,
+                    positive = deleteDialogAction
+                ).show(childFragmentManager, this.hashCode().toString())
             }
         }
 
