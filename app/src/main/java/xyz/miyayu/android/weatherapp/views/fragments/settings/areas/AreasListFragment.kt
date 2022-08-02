@@ -16,11 +16,10 @@ import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.constant.HTTPResponseCode
 import xyz.miyayu.android.weatherapp.databinding.AreaListFragmentBinding
-import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.network.WeatherApi
 import xyz.miyayu.android.weatherapp.repositories.SettingRepository
 import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
-import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
+import xyz.miyayu.android.weatherapp.viewmodel.AreaListFragmentViewModel
 import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
 
 /**
@@ -28,17 +27,14 @@ import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
  * 項目をタップすると削除するかどうか尋ね、フローティングボタンをタップすると項目追加画面に推移する。
  */
 class AreasListFragment : Fragment(R.layout.area_list_fragment) {
-    private lateinit var viewModel: SettingViewModel
-
-    companion object {
-        private const val TAG = "AreaList"
-    }
+    private lateinit var viewModel: AreaListFragmentViewModel
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModelFactory = ViewModelFactories.getSettingViewModelFactory()
-        viewModel = ViewModelProvider(this, viewModelFactory)[SettingViewModel::class.java]
+        val viewModelFactory = ViewModelFactories.getAreaListFragmentViewModelFactory()
+        viewModel = ViewModelProvider(this, viewModelFactory)[AreaListFragmentViewModel::class.java]
     }
 
 
@@ -91,16 +87,6 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
         UNAUTHORIZED(WeatherApplication.instance.getString(R.string.error_unauthorized))
     }
 
-    /**
-     * 地域を追加する
-     */
-    private fun addArea(area: String) {
-        val areaObj = Area(name = area)
-        CoroutineScope(Dispatchers.IO).launch {
-            WeatherApplication.instance.database.areaDao().insert(areaObj)
-        }
-    }
-
     private fun openApiKeySetting() {
         view?.findNavController()
             ?.navigate(AreasListFragmentDirections.toRestartApiKey())
@@ -110,7 +96,7 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
         CoroutineScope(Dispatchers.IO).launch {
             when (val status = isAreaIsAvailable(apiKey, areaName)) {
                 //OKの時
-                AvailableStatus.OK -> addArea(areaName)
+                AvailableStatus.OK -> viewModel.addArea(areaName)
                 //APIキーの再設定が必要なエラーが発生した時
                 AvailableStatus.API_KEY_NOT_EXIST, AvailableStatus.UNAUTHORIZED -> {
                     //APIキーを再設定するか尋ねるエラー
@@ -118,7 +104,7 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
                         title = getString(R.string.api_error),
                         message = status.message + "\n" + getString(R.string.api_resetting_question),
                         confirmEvent = { openApiKeySetting() },
-                        neutralEvent = { addArea(areaName) }
+                        neutralEvent = { viewModel.addArea(areaName) }
                     ).show(childFragmentManager, AreaApiErrorDialogFragment::class.java.name)
                 }
                 //APIキーの再設定が不要なエラーが発生した時
@@ -127,7 +113,7 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
                     AreaErrorDialogFragment(
                         title = getString(R.string.error),
                         message = status.message,
-                        neutralEvent = { addArea(areaName) }
+                        neutralEvent = { viewModel.addArea(areaName) }
                     ).show(childFragmentManager, AreaErrorDialogFragment::class.java.name)
                 }
             }
