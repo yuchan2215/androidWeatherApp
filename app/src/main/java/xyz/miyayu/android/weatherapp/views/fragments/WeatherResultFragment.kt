@@ -26,7 +26,7 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModelFactory = ViewModelFactories.getWeatherViewModelFactory()
+        val viewModelFactory = ViewModelFactories.getWeatherViewModelFactory(args.areaName)
         viewModel = ViewModelProvider(this, viewModelFactory)[WeatherViewModel::class.java]
     }
 
@@ -46,8 +46,6 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
                 view.findNavController().navigate(WeatherResultFragmentDirections.backTop())
             }.show(childFragmentManager, DeleteAreaDialogFragment::class.java.name)
         }
-
-        viewModel.fetchWeather(args.areaName)
 
         viewModel.status.observe(viewLifecycleOwner) {
             setAllGone(binding)

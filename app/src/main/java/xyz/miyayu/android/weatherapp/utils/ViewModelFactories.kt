@@ -15,9 +15,9 @@ object ViewModelFactories {
         return SettingViewModelFactory(settingDao, areaDao)
     }
 
-    fun getWeatherViewModelFactory(): WeatherViewModelFactory {
+    fun getWeatherViewModelFactory(areaName: String): WeatherViewModelFactory {
         val application = WeatherApplication.instance
         val settingDao = application.database.settingDao()
-        return WeatherViewModelFactory(settingDao)
+        return WeatherViewModelFactory(settingDao, areaName)
     }
 }

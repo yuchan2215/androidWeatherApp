@@ -7,11 +7,12 @@ import xyz.miyayu.android.weatherapp.viewmodel.WeatherViewModel
 
 class WeatherViewModelFactory(
     private val settingDao: SettingDao,
+    private val areaName: String
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(WeatherViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return WeatherViewModel(settingDao) as T
+            return WeatherViewModel(settingDao, areaName) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
