@@ -19,20 +19,20 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/notFoundError"
+            android:id="@+id/area_not_found_error_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{viewmodel.status.errorNotFoundVisibility}"
+            android:visibility="gone"
             tools:layout_editor_absoluteX="147dp"
             tools:layout_editor_absoluteY="-111dp"
-            tools:visibility="visible">
+            tools:visibility="gone">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/area_not_found_error_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewmodel.status.errorMessage}"
-                app:layout_constraintBottom_toTopOf="@+id/areaDeleteButton"
+                android:text="@string/area_check_notfound_message"
+                app:layout_constraintBottom_toTopOf="@+id/area_delete_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
                 tools:text="NotFound" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/areaDeleteButton"
+                android:id="@+id/area_delete_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -50,20 +50,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                app:layout_constraintTop_toBottomOf="@+id/area_not_found_error_text" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/error_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{viewmodel.status.errorVisibility}"
+            android:visibility="gone"
             tools:visibility="gone">
 
             <TextView
+                android:id="@+id/error_view_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewmodel.status.errorMessage}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -71,9 +72,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
+            android:id="@+id/result_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{viewmodel.status.resultVisibility}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -164,9 +166,10 @@
         </ScrollView>
 
         <xyz.miyayu.android.weatherapp.views.custom.LoadingView
+            android:id="@+id/loading_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{viewmodel.status.loadingVisibility}"
+            android:visibility="gone"
             tools:visibility="gone" />
 
 
