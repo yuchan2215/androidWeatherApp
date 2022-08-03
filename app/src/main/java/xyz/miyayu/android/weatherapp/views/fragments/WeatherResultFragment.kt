@@ -2,6 +2,7 @@ package xyz.miyayu.android.weatherapp.views.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -68,21 +69,21 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
     }
 
     private fun loadingBind(binding: WeatherResultFragmentBinding) {
-        binding.loadingView.visibility = View.VISIBLE
+        binding.loadingView.isVisible = true
     }
 
     private fun errorBind(binding: WeatherResultFragmentBinding, errorStatus: ErrorStatus) {
         when (errorStatus) {
             is ErrorStatus.ErrorWithMessage -> {
-                binding.errorView.visibility = View.VISIBLE
+                binding.errorView.isVisible = true
                 binding.errorViewText.text = getString(errorStatus.messageId)
             }
             is ErrorStatus.UnAuthorizedErrorWithMessage -> {
-                binding.errorView.visibility = View.VISIBLE
+                binding.errorView.isVisible = true
                 binding.errorViewText.text = getString(errorStatus.messageId)
             }
             is ErrorStatus.AreaErrorWithMessage -> {
-                binding.areaNotFoundErrorView.visibility = View.VISIBLE
+                binding.areaNotFoundErrorView.isVisible = true
                 binding.areaNotFoundErrorText.text = getString(errorStatus.messageId)
             }
         }
@@ -95,14 +96,13 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
 
         binding.tempText.text = text
         binding.weatherType.text = weather.description.firstOrNull()?.desc.orEmpty()
-        binding.resultView.visibility = View.VISIBLE
+        binding.resultView.isVisible = true
     }
 
     private fun setAllGone(binding: WeatherResultFragmentBinding) {
-        val gone = View.GONE
-        binding.resultView.visibility = gone
-        binding.errorView.visibility = gone
-        binding.loadingView.visibility = gone
-        binding.areaNotFoundErrorView.visibility = gone
+        binding.resultView.isVisible = false
+        binding.errorView.isVisible = false
+        binding.loadingView.isVisible = false
+        binding.areaNotFoundErrorView.isVisible = false
     }
 }
