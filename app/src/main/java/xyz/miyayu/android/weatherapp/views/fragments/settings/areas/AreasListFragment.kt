@@ -2,6 +2,7 @@ package xyz.miyayu.android.weatherapp.views.fragments.settings.areas
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -102,9 +103,21 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
      * 試しに天気を取得し、[Response]の内容によって処理を振り分ける。
      */
     private fun receivedAreaNameListener(areaName: String) {
+        val loading = LayoutInflater.from(requireActivity())
+            .inflate(R.layout.loading_margin_view, null)
+        val loadingDialog = AlertDialog.Builder(requireContext())
+            .setView(loading)
+            .setCancelable(false)
+            .show()
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                when (val response = WeatherRepository.fetchWeather(areaName)) {
+                val response = WeatherRepository.fetchWeather(areaName)
+
+                lifecycleScope.launch(Dispatchers.Main) {
+                    loadingDialog.dismiss()
+                }
+
+                when (response) {
                     //通常は呼び出されない
                     is Response.Loading -> throw IllegalStateException()
                     is Response.SuccessResponse<*> -> AreaRepository.insertArea(areaName)
