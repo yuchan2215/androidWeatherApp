@@ -1,17 +1,19 @@
 package xyz.miyayu.android.weatherapp.network
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 
 object WeatherApi {
     private const val BASE_URL = "https://api.openweathermap.org"
-    private val moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
+
+    private val format = Json { ignoreUnknownKeys = true }
+
+    private val contentType = "application/json".toMediaType()
 
     private val log =
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
@@ -19,10 +21,11 @@ object WeatherApi {
     private val client = OkHttpClient.Builder()
         .addInterceptor(log)
         .build()
-    
+
+    @OptIn(ExperimentalSerializationApi::class)
     private val retrofit = Retrofit.Builder()
         .client(client)
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .addConverterFactory(format.asConverterFactory(contentType))
         .baseUrl(BASE_URL)
         .build()
 
