@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.TopFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
-import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.TopFragmentViewModel
+import xyz.miyayu.android.weatherapp.viewmodel.factory.TopFragmentViewModelFactory
 import xyz.miyayu.android.weatherapp.views.adapters.AreaListAdapter
 
 /**
@@ -23,7 +23,7 @@ class TopFragment : Fragment(R.layout.top_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModelFactory = ViewModelFactories.getTopFragmentViewModelFactory()
+        val viewModelFactory = TopFragmentViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[TopFragmentViewModel::class.java]
     }
 

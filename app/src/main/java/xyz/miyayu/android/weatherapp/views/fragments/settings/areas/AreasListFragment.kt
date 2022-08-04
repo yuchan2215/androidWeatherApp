@@ -21,8 +21,8 @@ import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.network.WeatherApi
 import xyz.miyayu.android.weatherapp.repositories.SettingRepository
 import xyz.miyayu.android.weatherapp.utils.DialogAction
-import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.AreaListFragmentViewModel
+import xyz.miyayu.android.weatherapp.viewmodel.factory.AreaListFragmentViewModelFactory
 import xyz.miyayu.android.weatherapp.views.adapters.AreaListAdapter
 
 /**
@@ -36,7 +36,7 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModelFactory = ViewModelFactories.getAreaListFragmentViewModelFactory()
+        val viewModelFactory = AreaListFragmentViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[AreaListFragmentViewModel::class.java]
     }
 

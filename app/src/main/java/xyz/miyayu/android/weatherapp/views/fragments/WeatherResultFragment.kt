@@ -13,8 +13,8 @@ import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.network.json.Weather
 import xyz.miyayu.android.weatherapp.utils.ErrorStatus
 import xyz.miyayu.android.weatherapp.utils.Response
-import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.WeatherViewModel
+import xyz.miyayu.android.weatherapp.viewmodel.factory.WeatherViewModelFactory
 import xyz.miyayu.android.weatherapp.views.fragments.settings.areas.DeleteAreaDialogFragment
 
 /**
@@ -26,7 +26,7 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModelFactory = ViewModelFactories.getWeatherViewModelFactory(args.areaName)
+        val viewModelFactory = WeatherViewModelFactory(args.areaName)
         viewModel = ViewModelProvider(this, viewModelFactory)[WeatherViewModel::class.java]
     }
 
