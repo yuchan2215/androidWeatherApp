@@ -23,10 +23,12 @@ import xyz.miyayu.android.weatherapp.views.fragments.settings.areas.DeleteAreaDi
 class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
     private val args: WeatherResultFragmentArgs by navArgs()
     private lateinit var viewModel: WeatherViewModel
+    private val area: Area = Area(args.areaId, args.areaName)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModelFactory = WeatherViewModelFactory(args.areaName)
+        val viewModelFactory = WeatherViewModelFactory(area)
         viewModel = ViewModelProvider(this, viewModelFactory)[WeatherViewModel::class.java]
     }
 
