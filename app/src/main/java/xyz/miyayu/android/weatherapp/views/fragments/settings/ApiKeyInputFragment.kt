@@ -10,9 +10,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import xyz.miyayu.android.weatherapp.R
-import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.ApiInputFragmentBinding
-import xyz.miyayu.android.weatherapp.model.entity.Setting
+import xyz.miyayu.android.weatherapp.repositories.SettingRepository
 
 /**
  * APIキーを入力するためのフラグメント。
@@ -43,9 +42,7 @@ class ApiKeyInputFragment : Fragment(R.layout.api_input_fragment) {
         // テキストをデータベースに格納する
         val inputText = binding.itemKey.text.toString()
         CoroutineScope(Dispatchers.IO).launch {
-            WeatherApplication.instance.database.settingDao().insert(
-                Setting(value = inputText)
-            )
+            SettingRepository.setApiKey(inputText)
         }
         //戻る
         view?.findNavController()

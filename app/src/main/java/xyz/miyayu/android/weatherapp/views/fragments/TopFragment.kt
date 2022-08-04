@@ -9,21 +9,22 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.TopFragmentBinding
-import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
-import xyz.miyayu.android.weatherapp.viewmodel.SettingViewModel
-import xyz.miyayu.android.weatherapp.views.adapters.AreasListAdapter
+import xyz.miyayu.android.weatherapp.model.entity.Area
+import xyz.miyayu.android.weatherapp.viewmodel.TopFragmentViewModel
+import xyz.miyayu.android.weatherapp.viewmodel.factory.TopFragmentViewModelFactory
+import xyz.miyayu.android.weatherapp.views.adapters.AreaListAdapter
 
 /**
  * トップ画面のフラグメント
  */
 class TopFragment : Fragment(R.layout.top_fragment) {
-    private lateinit var viewModel: SettingViewModel
+    private lateinit var viewModel: TopFragmentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModelFactory = ViewModelFactories.getSettingViewModelFactory()
-        viewModel = ViewModelProvider(this, viewModelFactory)[SettingViewModel::class.java]
+        val viewModelFactory = TopFragmentViewModelFactory()
+        viewModel = ViewModelProvider(this, viewModelFactory)[TopFragmentViewModel::class.java]
     }
 
     /**
@@ -37,14 +38,16 @@ class TopFragment : Fragment(R.layout.top_fragment) {
         }
 
         // 地域一覧のアダプター
-        val listAdapter = AreasListAdapter { area ->
-            view.findNavController()
-                .navigate(
-                    TopFragmentDirections.actionTopFragmentToWeatherResult(
-                        area.name,
-                        area.id
+        val listAdapter = object : AreaListAdapter() {
+            override fun onItemClicked(area: Area) {
+                view.findNavController()
+                    .navigate(
+                        TopFragmentDirections.actionTopFragmentToWeatherResult(
+                            area.name,
+                            area.id
+                        )
                     )
-                )
+            }
         }
 
         binding.areaRecyclerView.apply {
@@ -55,10 +58,8 @@ class TopFragment : Fragment(R.layout.top_fragment) {
                 DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
             )
         }
-        viewModel.areaList.observe(viewLifecycleOwner) { items ->
-            items.let {
-                listAdapter.submitList(it)
-            }
+        viewModel.areaList.observe(viewLifecycleOwner) { itemList ->
+            listAdapter.submitList(itemList)
         }
     }
 }

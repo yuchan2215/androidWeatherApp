@@ -1,5 +1,6 @@
 package xyz.miyayu.android.weatherapp.views.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -13,9 +14,8 @@ import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.network.json.Weather
 import xyz.miyayu.android.weatherapp.utils.ErrorStatus
 import xyz.miyayu.android.weatherapp.utils.Response
-import xyz.miyayu.android.weatherapp.utils.ViewModelFactories
 import xyz.miyayu.android.weatherapp.viewmodel.WeatherViewModel
-import xyz.miyayu.android.weatherapp.views.fragments.settings.areas.DeleteAreaDialogFragment
+import xyz.miyayu.android.weatherapp.viewmodel.factory.WeatherViewModelFactory
 
 /**
  * 天気を表示するフラグメント
@@ -23,10 +23,12 @@ import xyz.miyayu.android.weatherapp.views.fragments.settings.areas.DeleteAreaDi
 class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
     private val args: WeatherResultFragmentArgs by navArgs()
     private lateinit var viewModel: WeatherViewModel
+    private val area: Area by lazy { Area(args.areaId, args.areaName) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModelFactory = ViewModelFactories.getWeatherViewModelFactory(args.areaName)
+        val viewModelFactory = WeatherViewModelFactory(area)
         viewModel = ViewModelProvider(this, viewModelFactory)[WeatherViewModel::class.java]
     }
 
@@ -35,16 +37,26 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
             view,
             savedInstanceState
         )
-        val binding = WeatherResultFragmentBinding.bind(view)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewmodel = viewModel
-        binding.areaName.text = args.areaName
-        binding.areaDeleteButton.setOnClickListener {
-            val area = Area(args.areaId, args.areaName)
-            //地域を削除するダイアログを表示する
-            DeleteAreaDialogFragment(area) {
-                view.findNavController().navigate(WeatherResultFragmentDirections.backTop())
-            }.show(childFragmentManager, DeleteAreaDialogFragment::class.java.name)
+
+        //削除ボタンが押された時にダイアログを表示する
+        val deleteButtonListener = View.OnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.delete_area_title)
+                .setMessage(area.name)
+                .setPositiveButton(R.string.delete) { _, _ ->
+                    viewModel.deleteArea()
+                    view.findNavController().navigate(WeatherResultFragmentDirections.backTop())
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+        }
+
+        val binding = WeatherResultFragmentBinding.bind(view).apply {
+            lifecycleOwner = viewLifecycleOwner
+            this.viewmodel = this@WeatherResultFragment.viewModel
+
+            //エリアを削除するボタンが押された時に、削除するダイアログを表示する。
+            areaDeleteButton.setOnClickListener(deleteButtonListener)
         }
 
         viewModel.status.observe(viewLifecycleOwner) {
@@ -92,6 +104,7 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
         val feelTemp = weather.main.getFeelTemp()
         val text = getString(R.string.temp_display, temp, feelTemp)
 
+        binding.areaName.text = args.areaName
         binding.tempText.text = text
         binding.weatherType.text = weather.description.firstOrNull()?.desc.orEmpty()
         binding.resultView.isVisible = true
