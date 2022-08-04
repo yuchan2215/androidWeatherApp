@@ -13,6 +13,6 @@ class SettingViewModel : ViewModel() {
     val areaList: LiveData<List<Area>> = AreaRepository.getAreaList().asLiveData()
 
     //APIキー
-    val apiKey: LiveData<Setting> = SettingRepository.getApiKeyFlow().asLiveData()
+    val apiKey: LiveData<Setting?> = SettingRepository.getApiKeyFlow().asLiveData()
 
 }

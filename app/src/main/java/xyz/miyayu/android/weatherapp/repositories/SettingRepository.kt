@@ -9,7 +9,7 @@ object SettingRepository {
     }
 
     suspend fun getApiKey(): String? {
-        return application.database.settingDao().getItem().value
+        return application.database.settingDao().getItem()?.value
     }
 
     fun getApiKeyFlow() = application.database.settingDao().getItemFlow()

@@ -59,7 +59,7 @@ class SettingFragment : Fragment(R.layout.setting_fragment) {
 
         //ViewModelの値をobserveする。
         settingViewModel.apiKey.map {
-            val size = it.value?.length ?: 0
+            val size = it?.value?.length ?: 0
             if (size == 0) {
                 return@map getString(R.string.api_key_not_configured)
             } else {
