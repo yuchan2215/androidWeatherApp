@@ -1,10 +1,10 @@
 package xyz.miyayu.android.weatherapp.network.json
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class WeatherDesc(
     /**天気の説明*/
-    @Json(name = "description") val desc: String
+    @SerialName("description") val desc: String
 )
