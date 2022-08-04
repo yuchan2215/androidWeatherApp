@@ -1,25 +1,20 @@
 package xyz.miyayu.android.weatherapp.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
 import xyz.miyayu.android.weatherapp.repositories.WeatherRepository
 import xyz.miyayu.android.weatherapp.utils.Response
 
-class WeatherViewModel : ViewModel() {
 
-    private val _status = MutableLiveData<Response>()
-    val status: LiveData<Response> = _status
+class WeatherViewModel(private val areaName: String) : ViewModel() {
 
-
-    fun fetchWeather(areaName: String) {
-
-        _status.value = Response.Loading
-        //サーバー上から天気を取得してくる
-        viewModelScope.launch {
-            _status.value = WeatherRepository.fetchWeather(areaName)
+    val status: LiveData<Response> =
+        liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+            emit(Response.Loading)
+            emit(WeatherRepository.fetchWeather(areaName))
         }
-    }
+
 }

@@ -13,8 +13,8 @@ object ViewModelFactories {
         return SettingViewModelFactory()
     }
 
-    fun getWeatherViewModelFactory(): WeatherViewModelFactory {
-        return WeatherViewModelFactory()
+    fun getWeatherViewModelFactory(areaName: String): WeatherViewModelFactory {
+        return WeatherViewModelFactory(areaName)
     }
 
     fun getTopFragmentViewModelFactory(): TopFragmentViewModelFactory {
