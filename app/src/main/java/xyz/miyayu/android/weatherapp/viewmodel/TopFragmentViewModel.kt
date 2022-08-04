@@ -2,8 +2,8 @@ package xyz.miyayu.android.weatherapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import xyz.miyayu.android.weatherapp.model.dao.AreaDao
+import xyz.miyayu.android.weatherapp.repositories.AreaRepository
 
-class TopFragmentViewModel(areaDao: AreaDao) : ViewModel() {
-    val areaList = areaDao.getItems().asLiveData()
+class TopFragmentViewModel : ViewModel() {
+    val areaList = AreaRepository.getAreaList().asLiveData()
 }

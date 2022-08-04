@@ -9,8 +9,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import xyz.miyayu.android.weatherapp.R
-import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.model.entity.Area
+import xyz.miyayu.android.weatherapp.repositories.AreaRepository
 
 /**
  * 地域を削除するときの確認ダイアログのフラグメント。
@@ -24,8 +24,7 @@ class DeleteAreaDialogFragment(private val area: Area, private val confirmEvent:
          */
         val confirmListener = OnClickListener { _, _ ->
             CoroutineScope(Dispatchers.IO).launch {
-                WeatherApplication.instance.database.areaDao()
-                    .delete(area)
+                AreaRepository.deleteArea(area)
             }
             confirmEvent.invoke()
         }

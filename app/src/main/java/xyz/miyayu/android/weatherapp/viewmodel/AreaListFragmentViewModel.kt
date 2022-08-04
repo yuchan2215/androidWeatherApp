@@ -4,12 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import xyz.miyayu.android.weatherapp.model.dao.AreaDao
 import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.repositories.AreaRepository
 
-class AreaListFragmentViewModel(areaDao: AreaDao) : ViewModel() {
-    val areaList = areaDao.getItems().asLiveData()
+class AreaListFragmentViewModel() : ViewModel() {
+    val areaList = AreaRepository.getAreaList().asLiveData()
 
     fun addArea(areaName: String) {
         viewModelScope.launch {

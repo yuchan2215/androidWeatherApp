@@ -1,6 +1,5 @@
 package xyz.miyayu.android.weatherapp.utils
 
-import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.viewmodel.factory.AreaListFragmentViewModelFactory
 import xyz.miyayu.android.weatherapp.viewmodel.factory.SettingViewModelFactory
 import xyz.miyayu.android.weatherapp.viewmodel.factory.TopFragmentViewModelFactory
@@ -11,27 +10,18 @@ import xyz.miyayu.android.weatherapp.viewmodel.factory.WeatherViewModelFactory
  */
 object ViewModelFactories {
     fun getSettingViewModelFactory(): SettingViewModelFactory {
-        val application = WeatherApplication.instance
-        val areaDao = application.database.areaDao()
-        val settingDao = application.database.settingDao()
-        return SettingViewModelFactory(settingDao, areaDao)
+        return SettingViewModelFactory()
     }
 
     fun getWeatherViewModelFactory(): WeatherViewModelFactory {
-        val application = WeatherApplication.instance
-        val settingDao = application.database.settingDao()
-        return WeatherViewModelFactory(settingDao)
+        return WeatherViewModelFactory()
     }
 
     fun getTopFragmentViewModelFactory(): TopFragmentViewModelFactory {
-        val application = WeatherApplication.instance
-        val areaDao = application.database.areaDao()
-        return TopFragmentViewModelFactory(areaDao)
+        return TopFragmentViewModelFactory()
     }
 
     fun getAreaListFragmentViewModelFactory(): AreaListFragmentViewModelFactory {
-        val application = WeatherApplication.instance
-        val areaDao = application.database.areaDao()
-        return AreaListFragmentViewModelFactory(areaDao)
+        return AreaListFragmentViewModelFactory()
     }
 }

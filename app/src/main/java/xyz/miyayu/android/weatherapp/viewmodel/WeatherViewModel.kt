@@ -5,11 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import xyz.miyayu.android.weatherapp.model.dao.SettingDao
 import xyz.miyayu.android.weatherapp.repositories.WeatherRepository
 import xyz.miyayu.android.weatherapp.utils.Response
 
-class WeatherViewModel(val settingDao: SettingDao) : ViewModel() {
+class WeatherViewModel : ViewModel() {
 
     private val _status = MutableLiveData<Response>()
     val status: LiveData<Response> = _status
