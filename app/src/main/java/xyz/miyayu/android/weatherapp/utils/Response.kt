@@ -22,7 +22,7 @@ sealed class Response {
         /**
          * 不明なエラーを作成する
          */
-        fun createUnknownError(): Response {
+        fun createUnknownError(): ErrorResponse {
             return ErrorResponse(errorStatus = ErrorStatus.ErrorWithMessage())
         }
 
