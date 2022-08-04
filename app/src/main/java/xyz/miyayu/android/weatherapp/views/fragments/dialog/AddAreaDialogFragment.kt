@@ -62,7 +62,7 @@ class AddAreaDialogFragment : DialogFragment(), TextWatcher {
     }
 
     override fun afterTextChanged(s: Editable?) {
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = s?.isNotEmpty() ?: false
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = s.isNullOrEmpty()
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
