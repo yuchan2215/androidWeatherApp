@@ -124,6 +124,10 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
                     is Response.ErrorResponse -> onFetchErrorListener(response, areaName)
                 }
             } catch (e: Throwable) {
+                e.printStackTrace()
+                lifecycleScope.launch(Dispatchers.Main) {
+                    loadingDialog.dismiss()
+                }
                 onFetchErrorListener(Response.createUnknownError(), areaName)
             }
         }
