@@ -123,6 +123,11 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
             } catch (e: Throwable) {
             }
         }
+        map.uiSettings.apply {
+            setAllGesturesEnabled(false)
+
+            isZoomControlsEnabled = true
+        }
         observeViewModel()
     }
 
