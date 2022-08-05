@@ -54,7 +54,7 @@ class ApiKeyInputFragment : Fragment(R.layout.api_input_fragment) {
      */
     private val textChangeListener = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            binding.saveBtn.isEnabled = s?.isNotEmpty() ?: false
+            binding.saveBtn.isEnabled = !s.isNullOrEmpty()
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
