@@ -18,7 +18,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.WeatherResultFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
-import xyz.miyayu.android.weatherapp.network.json.Weather
+import xyz.miyayu.android.weatherapp.network.json.weather.Weather
 import xyz.miyayu.android.weatherapp.utils.ErrorStatus
 import xyz.miyayu.android.weatherapp.utils.Response
 import xyz.miyayu.android.weatherapp.viewmodel.WeatherViewModel

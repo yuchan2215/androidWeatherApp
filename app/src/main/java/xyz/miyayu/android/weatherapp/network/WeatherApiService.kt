@@ -3,7 +3,7 @@ package xyz.miyayu.android.weatherapp.network
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
-import xyz.miyayu.android.weatherapp.network.json.Weather
+import xyz.miyayu.android.weatherapp.network.json.weather.Weather
 import java.util.*
 
 interface WeatherApiService {

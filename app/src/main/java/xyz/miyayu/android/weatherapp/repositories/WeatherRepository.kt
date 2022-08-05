@@ -3,7 +3,7 @@ package xyz.miyayu.android.weatherapp.repositories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.miyayu.android.weatherapp.network.WeatherApi
-import xyz.miyayu.android.weatherapp.network.json.Weather
+import xyz.miyayu.android.weatherapp.network.json.weather.Weather
 import xyz.miyayu.android.weatherapp.utils.Response
 
 object WeatherRepository {

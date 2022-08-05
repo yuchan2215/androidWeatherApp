@@ -1,4 +1,4 @@
-package xyz.miyayu.android.weatherapp.network.json
+package xyz.miyayu.android.weatherapp.network.json.weather
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
