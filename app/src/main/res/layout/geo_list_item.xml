@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textAppearance="?attr/textAppearanceListItemSecondary"
-            android:textColor="@color/material_dynamic_primary30"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/geo_name"
             app:layout_constraintTop_toTopOf="@+id/geo_name"
