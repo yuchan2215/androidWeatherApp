@@ -9,5 +9,6 @@ data class Direct(
     @SerialName("local_names") val names: LocalNames = LocalNames(),
     @SerialName("lon") val longitude: Double,
     @SerialName("lat") val latitude: Double,
+    @SerialName("country") val country: String,
     @SerialName("state") val state: String? = null
 )
