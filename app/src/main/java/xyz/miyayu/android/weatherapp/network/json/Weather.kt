@@ -10,5 +10,7 @@ data class Weather(
     /** 天気の説明などが含まれる */
     @SerialName("weather") val description: List<WeatherDesc>,
     /** 気温などが含まれる */
-    val main: WeatherMain
+    val main: WeatherMain,
+    /**緯度経度が含まれる*/
+    @SerialName("coord") val coordinate: Coordinate
 )

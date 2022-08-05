@@ -8,6 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.WeatherResultFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
@@ -20,9 +27,10 @@ import xyz.miyayu.android.weatherapp.viewmodel.factory.WeatherViewModelFactory
 /**
  * 天気を表示するフラグメント
  */
-class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
+class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapReadyCallback {
     private val args: WeatherResultFragmentArgs by navArgs()
     private lateinit var viewModel: WeatherViewModel
+    private lateinit var googleMap: GoogleMap
     private val area: Area by lazy { Area(args.areaId, args.areaName) }
 
 
@@ -59,6 +67,11 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
             areaDeleteButton.setOnClickListener(deleteButtonListener)
         }
 
+        //GoogleMap関係を表示させる。
+        val mapFragment = SupportMapFragment.newInstance()
+        mapFragment.getMapAsync(this)
+        childFragmentManager.beginTransaction().add(R.id.google_map_frame, mapFragment).commit()
+
         viewModel.status.observe(viewLifecycleOwner) {
             setAllGone(binding)
             when (val status = it) {
@@ -74,6 +87,17 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
                     }
                     successBind(binding, status.body)
                 }
+            }
+        }
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map.apply {
+            try {
+                val mapStyle =
+                    MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json)
+                setMapStyle(mapStyle)
+            } catch (e: Throwable) {
             }
         }
     }
@@ -108,6 +132,13 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
         binding.tempText.text = text
         binding.weatherType.text = weather.description.firstOrNull()?.desc.orEmpty()
         binding.resultView.isVisible = true
+
+        val weatherPosition = LatLng(weather.coordinate.latitude, weather.coordinate.longitude)
+        val markerOption = MarkerOptions()
+            .position(weatherPosition)
+            .title(args.areaName)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(weatherPosition, 8f))
+        googleMap.addMarker(markerOption)
     }
 
     private fun setAllGone(binding: WeatherResultFragmentBinding) {
