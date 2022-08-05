@@ -19,7 +19,7 @@ object GeoRepository {
      * エリアの取得中にエラーが発生した場合は[Response.createUnknownError]を返す。
      * 何もなけれた[Response.createResponseFromRetrofit]を返す。
      */
-    suspend fun fetchGeos(areaName: String): Response {
+    suspend fun fetchGeos(areaName: String): Response<List<Direct>> {
         return withContext(Dispatchers.IO) {
             try {
                 //APIキーを読み込む
