@@ -5,12 +5,12 @@ import xyz.miyayu.android.weatherapp.R
 /**
  * レスポンス
  */
-sealed class Response {
+sealed class Response<T> {
     companion object {
         /**
          * retrofit2のレスポンスからレスポンスを作成する。
          */
-        fun <T> createResponseFromRetrofit(response: retrofit2.Response<T>): Response {
+        fun <T> createResponseFromRetrofit(response: retrofit2.Response<T>): Response<T> {
             return when {
                 response.isSuccessful && response.body() != null ->
                     SuccessResponse(response.body()!!)
@@ -22,27 +22,27 @@ sealed class Response {
         /**
          * 不明なエラーを作成する
          */
-        fun createUnknownError(): ErrorResponse {
+        fun <T> createUnknownError(): ErrorResponse<T> {
             return ErrorResponse(errorStatus = ErrorStatus.ErrorWithMessage())
         }
 
         /**
          * APIキーが設定されていないというメッセージで、APIキーの再設定が必要なレスポンスを作成する
          */
-        fun createApiKeyNotConfiguredResponse(): Response {
+        fun <T> createApiKeyNotConfiguredResponse(): Response<T> {
             return ErrorResponse(ErrorStatus.UnAuthorizedErrorWithMessage(R.string.api_key_not_found_error_message))
         }
 
     }
 
     /**成功した時のレスポンス*/
-    data class SuccessResponse<T>(val body: T) : Response()
+    data class SuccessResponse<T>(val body: T) : Response<T>()
 
     /**失敗した時のレスポンス*/
-    data class ErrorResponse(val errorStatus: ErrorStatus) : Response()
+    data class ErrorResponse<T>(val errorStatus: ErrorStatus) : Response<T>()
 
     /**読み込み中*/
-    object Loading : Response()
+    class Loading<T> : Response<T>()
 }
 
 

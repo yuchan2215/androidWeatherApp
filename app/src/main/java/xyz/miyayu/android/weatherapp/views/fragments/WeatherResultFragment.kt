@@ -94,10 +94,10 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
         viewModel.status.observe(viewLifecycleOwner) {
             setAllGone(binding)
             when (val status = it) {
-                is Response.Loading -> {
+                is Response.Loading<*> -> {
                     loadingBind(binding)
                 }
-                is Response.ErrorResponse -> {
+                is Response.ErrorResponse<*> -> {
                     errorBind(binding, status.errorStatus)
                 }
                 is Response.SuccessResponse<*> -> {
