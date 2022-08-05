@@ -8,9 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.WeatherResultFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
@@ -88,7 +92,14 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
     }
 
     override fun onMapReady(map: GoogleMap) {
-        googleMap = map
+        googleMap = map.apply {
+            try {
+                val mapStyle =
+                    MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json)
+                setMapStyle(mapStyle)
+            } catch (e: Throwable) {
+            }
+        }
     }
 
     private fun loadingBind(binding: WeatherResultFragmentBinding) {
@@ -121,6 +132,13 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
         binding.tempText.text = text
         binding.weatherType.text = weather.description.firstOrNull()?.desc.orEmpty()
         binding.resultView.isVisible = true
+
+        val weatherPosition = LatLng(weather.coordinate.latitude, weather.coordinate.longitude)
+        val markerOption = MarkerOptions()
+            .position(weatherPosition)
+            .title(args.areaName)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(weatherPosition, 8f))
+        googleMap.addMarker(markerOption)
     }
 
     private fun setAllGone(binding: WeatherResultFragmentBinding) {
