@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.miyayu.android.weatherapp.R
@@ -46,7 +47,7 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
         AreaListFragmentBinding.bind(view).apply {
             //地域を追加するフラグメントを表示する
             addLocationBtn.setOnClickListener {
-
+                view.findNavController().navigate(AreasListFragmentDirections.toGeoSearch())
             }
 
             areaRecyclerView.apply {

@@ -49,6 +49,9 @@
             app:destination="@id/settingFragment"
             app:popUpTo="@id/settingFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/toGeoSearch"
+            app:destination="@id/geoSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/weatherResult"
@@ -66,5 +69,13 @@
             app:destination="@id/topFragment"
             app:popUpTo="@id/topFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/geoSearchFragment"
+        android:name="xyz.miyayu.android.weatherapp.views.fragments.settings.areas.GeoSearchFragment"
+        android:label="GeoSearchFragment">
+        <action
+            android:id="@+id/toResetApiKey"
+            app:destination="@id/apiKeyInputFragment" />
     </fragment>
 </navigation>
