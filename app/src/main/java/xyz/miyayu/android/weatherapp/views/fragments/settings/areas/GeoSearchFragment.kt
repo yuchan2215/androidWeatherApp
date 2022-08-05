@@ -5,12 +5,15 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.GeoSearchFragmentBinding
+import xyz.miyayu.android.weatherapp.network.json.direct.Direct
 import xyz.miyayu.android.weatherapp.utils.ErrorStatus
 import xyz.miyayu.android.weatherapp.utils.Response
 import xyz.miyayu.android.weatherapp.viewmodel.GeoSearchViewModel
 import xyz.miyayu.android.weatherapp.viewmodel.factory.GeoSearchViewModelFactory
+import xyz.miyayu.android.weatherapp.views.adapters.GeoListAdapter
 
 class GeoSearchFragment : Fragment(R.layout.geo_search_fragment),
     androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -26,6 +29,16 @@ class GeoSearchFragment : Fragment(R.layout.geo_search_fragment),
             areaSearchView.setIconifiedByDefault(false)
             areaSearchView.setOnQueryTextListener(this@GeoSearchFragment)
         }
+        val adapter = object : GeoListAdapter() {
+            override fun onItemClicked(area: Direct) {
+                TODO("Not yet implemented")
+            }
+        }
+        binding.itemsList.apply {
+            this.adapter = adapter
+            this.layoutManager = LinearLayoutManager(requireContext())
+        }
+
         viewModel.isLoading.observe(viewLifecycleOwner) {
             binding.loadingView.isVisible = it
         }
@@ -36,6 +49,7 @@ class GeoSearchFragment : Fragment(R.layout.geo_search_fragment),
                     ""//何もしない
                 }
                 is Response.SuccessResponse -> {
+                    adapter.submitList(it.body)
                     getString(R.string.geo_founded, it.body.size)
                 }
                 is Response.ErrorResponse -> {
