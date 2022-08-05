@@ -8,6 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.WeatherResultFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
@@ -20,9 +25,10 @@ import xyz.miyayu.android.weatherapp.viewmodel.factory.WeatherViewModelFactory
 /**
  * 天気を表示するフラグメント
  */
-class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
+class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapReadyCallback {
     private val args: WeatherResultFragmentArgs by navArgs()
     private lateinit var viewModel: WeatherViewModel
+    private lateinit var mapview: GoogleMap
     private val area: Area by lazy { Area(args.areaId, args.areaName) }
 
 
@@ -59,6 +65,11 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
             areaDeleteButton.setOnClickListener(deleteButtonListener)
         }
 
+        //GoogleMap関係を表示させる。
+        val mapFragment = SupportMapFragment.newInstance()
+        mapFragment.getMapAsync(this)
+        childFragmentManager.beginTransaction().add(R.id.google_map_frame, mapFragment).commit()
+
         viewModel.status.observe(viewLifecycleOwner) {
             setAllGone(binding)
             when (val status = it) {
@@ -76,6 +87,14 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment) {
                 }
             }
         }
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
+        mapview = p0
+        p0.moveCamera(CameraUpdateFactory.newLatLng(LatLng(356.0, 356.0)))
+        p0.moveCamera(CameraUpdateFactory.zoomTo(4f))
+        p0.uiSettings.isZoomGesturesEnabled = true
+        p0.uiSettings.isZoomControlsEnabled = true
     }
 
     private fun loadingBind(binding: WeatherResultFragmentBinding) {
