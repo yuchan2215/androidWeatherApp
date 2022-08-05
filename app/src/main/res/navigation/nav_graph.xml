@@ -77,5 +77,12 @@
         <action
             android:id="@+id/toResetApiKey"
             app:destination="@id/apiKeyInputFragment" />
+        <action
+            android:id="@+id/toGeoView"
+            app:destination="@id/geoViewFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/geoViewFragment"
+        android:name="xyz.miyayu.android.weatherapp.views.fragments.settings.areas.GeoViewFragment"
+        android:label="GeoViewFragment" />
 </navigation>

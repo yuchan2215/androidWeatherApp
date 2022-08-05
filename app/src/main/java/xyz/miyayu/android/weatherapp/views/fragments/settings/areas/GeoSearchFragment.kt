@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.databinding.GeoSearchFragmentBinding
@@ -31,7 +32,7 @@ class GeoSearchFragment : Fragment(R.layout.geo_search_fragment),
         }
         val adapter = object : GeoListAdapter() {
             override fun onItemClicked(area: Direct) {
-                TODO("Not yet implemented")
+                view.findNavController().navigate(GeoSearchFragmentDirections.toGeoView())
             }
         }
         binding.itemsList.apply {
