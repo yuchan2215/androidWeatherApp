@@ -30,6 +30,10 @@ import xyz.miyayu.android.weatherapp.viewmodel.factory.WeatherViewModelFactory
 class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapReadyCallback {
     private val args: WeatherResultFragmentArgs by navArgs()
     private lateinit var viewModel: WeatherViewModel
+
+    private var _binding: WeatherResultFragmentBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var googleMap: GoogleMap
     private val area: Area by lazy { Area(args.areaId, args.areaName) }
 
@@ -38,6 +42,11 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
         super.onCreate(savedInstanceState)
         val viewModelFactory = WeatherViewModelFactory(area)
         viewModel = ViewModelProvider(this, viewModelFactory)[WeatherViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,7 +68,7 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
                 .show()
         }
 
-        val binding = WeatherResultFragmentBinding.bind(view).apply {
+        _binding = WeatherResultFragmentBinding.bind(view).apply {
             lifecycleOwner = viewLifecycleOwner
             this.viewmodel = this@WeatherResultFragment.viewModel
 
@@ -72,6 +81,16 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
         mapFragment.getMapAsync(this)
         childFragmentManager.beginTransaction().add(R.id.google_map_frame, mapFragment).commit()
 
+    }
+
+    /**
+     * ViewModelのオブザーブを開始する。
+     * googleMapが初期化されている必要あり。
+     */
+    private fun observeViewModel() {
+        if (!::googleMap.isInitialized) {
+            throw IllegalStateException("googleMap is Not Initialized!")
+        }
         viewModel.status.observe(viewLifecycleOwner) {
             setAllGone(binding)
             when (val status = it) {
@@ -91,6 +110,10 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
         }
     }
 
+    /**
+     * GoogleMapの準備ができた際に呼び出される。
+     * 準備ができたらviewModelのオブザーブを開始する。
+     */
     override fun onMapReady(map: GoogleMap) {
         googleMap = map.apply {
             try {
@@ -100,6 +123,7 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
             } catch (e: Throwable) {
             }
         }
+        observeViewModel()
     }
 
     private fun loadingBind(binding: WeatherResultFragmentBinding) {
