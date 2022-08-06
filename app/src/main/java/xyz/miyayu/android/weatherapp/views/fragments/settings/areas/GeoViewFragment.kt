@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -40,6 +41,9 @@ class GeoViewFragment : Fragment(R.layout.geo_view), OnMapReadyCallback {
 
             if (args.subName == null || args.name == args.subName) {
                 placeNameSub.isVisible = false
+            }
+            addLocationBtn.setOnClickListener {
+                view.findNavController().navigate(GeoViewFragmentDirections.toSearchView())
             }
         }
 

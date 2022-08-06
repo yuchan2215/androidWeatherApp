@@ -98,5 +98,10 @@
             android:name="subName"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/toSearchView"
+            app:destination="@id/geoSearchFragment"
+            app:popUpTo="@id/geoSearchFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
