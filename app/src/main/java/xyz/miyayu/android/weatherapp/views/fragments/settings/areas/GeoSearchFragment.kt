@@ -32,7 +32,14 @@ class GeoSearchFragment : Fragment(R.layout.geo_search_fragment),
         }
         val adapter = object : GeoListAdapter() {
             override fun onItemClicked(area: Direct) {
-                view.findNavController().navigate(GeoSearchFragmentDirections.toGeoView())
+                view.findNavController().navigate(
+                    GeoSearchFragmentDirections.toGeoView(
+                        lon = area.longitude.toString(),
+                        lat = area.latitude.toString(),
+                        name = area.name,
+                        subName = area.names.currentName()
+                    )
+                )
             }
         }
         binding.itemsList.apply {

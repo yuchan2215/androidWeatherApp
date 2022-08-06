@@ -84,5 +84,19 @@
     <fragment
         android:id="@+id/geoViewFragment"
         android:name="xyz.miyayu.android.weatherapp.views.fragments.settings.areas.GeoViewFragment"
-        android:label="GeoViewFragment" />
+        android:label="GeoViewFragment">
+        <argument
+            android:name="lon"
+            app:argType="string" />
+        <argument
+            android:name="lat"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="subName"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>
