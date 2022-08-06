@@ -24,6 +24,9 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
 
     private lateinit var viewModel: AreaListFragmentViewModel
 
+    private var _adapter: AreaListAdapter? = null
+    private val adapter get() = _adapter!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,11 +35,16 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
 
     }
 
+    override fun onDestroyView() {
+        _adapter = null
+        super.onDestroyView()
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val listAdapter = object : AreaListAdapter() {
+        _adapter = object : AreaListAdapter() {
             /**項目が選択された時に、削除するかどうか尋ねるフラグメントを表示する。*/
             override fun onItemClicked(area: Area) {
                 showAreaDeleteDialog(requireContext(), area)
@@ -51,7 +59,7 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
             }
 
             areaRecyclerView.apply {
-                adapter = listAdapter
+                this.adapter = this@AreasListFragment.adapter
                 layoutManager = LinearLayoutManager(this@AreasListFragment.context)
                 //項目ごとに区切り線を入れる。
                 addItemDecoration(
@@ -63,7 +71,7 @@ class AreasListFragment : Fragment(R.layout.area_list_fragment) {
         //地域が更新されたらリストを更新する。
         viewModel.areaList.observe(this.viewLifecycleOwner) { items ->
             items.let {
-                listAdapter.submitList(it)
+                adapter.submitList(it)
             }
         }
     }

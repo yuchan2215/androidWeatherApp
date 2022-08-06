@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import xyz.miyayu.android.weatherapp.R
+import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.WeatherResultFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
 import xyz.miyayu.android.weatherapp.network.json.weather.Weather
@@ -118,7 +119,10 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
         googleMap = map.apply {
             try {
                 val mapStyle =
-                    MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json)
+                    MapStyleOptions.loadRawResourceStyle(
+                        WeatherApplication.instance.applicationContext,
+                        R.raw.style_json
+                    )
                 setMapStyle(mapStyle)
             } catch (e: Throwable) {
             }

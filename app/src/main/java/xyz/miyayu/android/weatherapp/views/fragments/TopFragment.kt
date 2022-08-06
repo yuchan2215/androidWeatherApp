@@ -20,11 +20,19 @@ import xyz.miyayu.android.weatherapp.views.adapters.AreaListAdapter
 class TopFragment : Fragment(R.layout.top_fragment) {
     private lateinit var viewModel: TopFragmentViewModel
 
+    private var _adapter: AreaListAdapter? = null
+    private val adapter get() = _adapter!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val viewModelFactory = TopFragmentViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[TopFragmentViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        _adapter = null
+        super.onDestroyView()
     }
 
     /**
@@ -38,7 +46,7 @@ class TopFragment : Fragment(R.layout.top_fragment) {
         }
 
         // 地域一覧のアダプター
-        val listAdapter = object : AreaListAdapter() {
+        _adapter = object : AreaListAdapter() {
             override fun onItemClicked(area: Area) {
                 view.findNavController()
                     .navigate(
@@ -51,7 +59,7 @@ class TopFragment : Fragment(R.layout.top_fragment) {
         }
 
         binding.areaRecyclerView.apply {
-            adapter = listAdapter
+            this.adapter = this@TopFragment.adapter
             layoutManager = LinearLayoutManager(this@TopFragment.context)
             //項目ごとに区切り線を入れる。
             addItemDecoration(
@@ -59,7 +67,7 @@ class TopFragment : Fragment(R.layout.top_fragment) {
             )
         }
         viewModel.areaList.observe(viewLifecycleOwner) { itemList ->
-            listAdapter.submitList(itemList)
+            adapter.submitList(itemList)
         }
     }
 }

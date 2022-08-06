@@ -19,10 +19,19 @@ import xyz.miyayu.android.weatherapp.views.adapters.GeoListAdapter
 class GeoSearchFragment : Fragment(R.layout.geo_search_fragment),
     androidx.appcompat.widget.SearchView.OnQueryTextListener {
     private lateinit var viewModel: GeoSearchViewModel
+
+    private var _adapter: GeoListAdapter? = null
+    private val adapter get() = _adapter!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val factory = GeoSearchViewModelFactory()
         viewModel = ViewModelProvider(this, factory)[GeoSearchViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        _adapter = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,7 +39,7 @@ class GeoSearchFragment : Fragment(R.layout.geo_search_fragment),
             areaSearchView.setIconifiedByDefault(false)
             areaSearchView.setOnQueryTextListener(this@GeoSearchFragment)
         }
-        val adapter = object : GeoListAdapter() {
+        _adapter = object : GeoListAdapter() {
             override fun onItemClicked(area: Direct) {
                 view.findNavController().navigate(
                     GeoSearchFragmentDirections.toGeoView(
@@ -43,7 +52,7 @@ class GeoSearchFragment : Fragment(R.layout.geo_search_fragment),
             }
         }
         binding.itemsList.apply {
-            this.adapter = adapter
+            this.adapter = this@GeoSearchFragment.adapter
             this.layoutManager = LinearLayoutManager(requireContext())
         }
 

@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import xyz.miyayu.android.weatherapp.R
+import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.GeoViewBinding
 
 class GeoViewFragment : Fragment(R.layout.geo_view), OnMapReadyCallback {
@@ -52,7 +53,10 @@ class GeoViewFragment : Fragment(R.layout.geo_view), OnMapReadyCallback {
 
         try {
             val mapStyle =
-                MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json)
+                MapStyleOptions.loadRawResourceStyle(
+                    WeatherApplication.instance.applicationContext,
+                    R.raw.style_json
+                )
             googleMap.setMapStyle(mapStyle)
         } catch (_: Throwable) {
         }
