@@ -21,8 +21,8 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 argument(
-                        "room.schemaLocation",
-                        "$projectDir/schemas"
+                    "room.schemaLocation",
+                    "$projectDir/schemas"
                 )
             }
         }
@@ -32,8 +32,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
@@ -50,6 +50,10 @@ android {
 }
 
 dependencies {
+    val navVersion: String by project
+    val roomVersion: String by project
+    val retrofitVersion: String by project
+    val leakcanaryVersion: String by project
 
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.appcompat:appcompat:1.4.2")
@@ -64,21 +68,21 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.0")
 
     // Java language implementation
-    implementation("androidx.navigation:navigation-fragment:$nav_version")
-    implementation("androidx.navigation:navigation-ui:$nav_version")
+    implementation("androidx.navigation:navigation-fragment:$navVersion")
+    implementation("androidx.navigation:navigation-ui:$navVersion")
 
     // Kotlin
-    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     // Feature module Support
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$navVersion")
 
     // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+    androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
 
     // Jetpack Compose Integration
-    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // Fragment test
     debugImplementation("androidx.fragment:fragment-testing:1.5.0")
@@ -89,7 +93,7 @@ dependencies {
     kapt("androidx.room:room-compiler:$roomVersion")
 
     // retrofit
-    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
@@ -99,7 +103,7 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-maps:18.1.0")
 
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakcanary_version")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion")
 
 
 }
