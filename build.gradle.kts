@@ -1,13 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    val nav_version by extra("2.5.0")
+    val navVersion by extra("2.5.0")
     val roomVersion by extra("2.4.3")
-    val retrofit_version by extra("2.9.0")
-    val kotlin_version by extra("1.7.10")
-    val leakcanary_version by extra("2.9.1")
+    val retrofitVersion by extra("2.9.0")
+    val kotlinVersion by extra("1.7.10")
+    val leakcanaryVersion by extra("2.9.1")
     dependencies {
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:$kotlin_version")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion")
     }
 }
 plugins {
