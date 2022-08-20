@@ -35,7 +35,7 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
     private val binding get() = _binding!!
 
     private lateinit var googleMap: GoogleMap
-    private val area: Area by lazy { Area(args.areaId, args.areaName) }
+    private val area: Area by lazy { Area(args.areaId, args.areaName, null, null) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
