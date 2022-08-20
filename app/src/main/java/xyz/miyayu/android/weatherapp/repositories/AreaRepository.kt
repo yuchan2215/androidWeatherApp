@@ -9,7 +9,11 @@ object AreaRepository {
 
 
     suspend fun insertArea(areaName: String) {
-        val area = Area(name = areaName)
+        val area = Area(
+            name = areaName,
+            latitude = null,
+            longitude = null
+        )
         WeatherApplication.instance.database.areaDao().insert(area)
     }
 
