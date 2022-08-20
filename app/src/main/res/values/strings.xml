@@ -32,4 +32,5 @@
     <string name="area_check_notfound_message">その地域はサーバー上に存在しません。</string>
     <string name="geo_founded">%d 件見つかりました</string>
     <string name="delete">Delete</string>
+    <string name="invalid">Invalid</string>
 </resources>
