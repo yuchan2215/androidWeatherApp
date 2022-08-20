@@ -47,6 +47,9 @@ class GeoViewFragment : Fragment(R.layout.geo_view), OnMapReadyCallback, TextWat
 
             if (args.subName == null || args.name == args.subName) {
                 placeNameSub.isVisible = false
+                areaNameInputEdit.setText(args.name)
+            } else {
+                areaNameInputEdit.setText("${args.subName}(${args.name})")
             }
             areaNameInputEdit.addTextChangedListener(this@GeoViewFragment)
             addLocationBtn.setOnClickListener {
