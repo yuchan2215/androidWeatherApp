@@ -23,5 +23,22 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="地域名" />
 
+        <TextView
+            android:id="@+id/invalid_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/shape_round"
+            android:backgroundTint="?attr/colorSecondary"
+            android:padding="8dp"
+            android:textAppearance="?attr/textAppearanceListItemSecondary"
+            android:textColor="?attr/colorOnSecondary"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/area_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/area_name"
+            tools:text="無効"
+            tools:visibility="visible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
