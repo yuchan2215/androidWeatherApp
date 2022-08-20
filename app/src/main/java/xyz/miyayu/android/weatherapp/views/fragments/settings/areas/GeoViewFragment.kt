@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -13,9 +14,12 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import xyz.miyayu.android.weatherapp.R
 import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.GeoViewBinding
+import xyz.miyayu.android.weatherapp.repositories.AreaRepository
 
 class GeoViewFragment : Fragment(R.layout.geo_view), OnMapReadyCallback {
     private var _binding: GeoViewBinding? = null
@@ -43,6 +47,14 @@ class GeoViewFragment : Fragment(R.layout.geo_view), OnMapReadyCallback {
                 placeNameSub.isVisible = false
             }
             addLocationBtn.setOnClickListener {
+                val inputText = areaNameInputEdit.text.toString()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    AreaRepository.insertArea(
+                        areaName = inputText,
+                        latitude = args.lat.toDouble(),
+                        longitude = args.lon.toDouble()
+                    )
+                }
                 view.findNavController().navigate(GeoViewFragmentDirections.toSearchView())
             }
         }

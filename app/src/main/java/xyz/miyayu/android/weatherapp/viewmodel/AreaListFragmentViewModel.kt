@@ -10,11 +10,6 @@ import xyz.miyayu.android.weatherapp.repositories.AreaRepository
 class AreaListFragmentViewModel() : ViewModel() {
     val areaList = AreaRepository.getAreaList().asLiveData()
 
-    fun addArea(areaName: String) {
-        viewModelScope.launch {
-            AreaRepository.insertArea(areaName)
-        }
-    }
 
     fun deleteArea(area: Area) {
         viewModelScope.launch {
