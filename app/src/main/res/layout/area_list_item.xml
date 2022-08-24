@@ -31,13 +31,13 @@
             android:background="@drawable/shape_round"
             android:backgroundTint="?attr/colorSecondary"
             android:padding="8dp"
+            android:text="@string/invalid"
             android:textAppearance="?attr/textAppearanceListItemSecondary"
             android:textColor="?attr/colorOnSecondary"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/area_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/area_name"
-            tools:text="無効"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
