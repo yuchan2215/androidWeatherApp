@@ -50,8 +50,8 @@
             app:popUpTo="@id/settingFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/toRestartApiKey"
-            app:destination="@id/apiKeyInputFragment" />
+            android:id="@+id/toGeoSearch"
+            app:destination="@id/geoSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/weatherResult"
@@ -68,6 +68,40 @@
             android:id="@+id/backTop"
             app:destination="@id/topFragment"
             app:popUpTo="@id/topFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/geoSearchFragment"
+        android:name="xyz.miyayu.android.weatherapp.views.fragments.settings.areas.GeoSearchFragment"
+        android:label="GeoSearchFragment">
+        <action
+            android:id="@+id/toResetApiKey"
+            app:destination="@id/apiKeyInputFragment" />
+        <action
+            android:id="@+id/toGeoView"
+            app:destination="@id/geoViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/geoViewFragment"
+        android:name="xyz.miyayu.android.weatherapp.views.fragments.settings.areas.GeoViewFragment"
+        android:label="GeoViewFragment">
+        <argument
+            android:name="lon"
+            app:argType="string" />
+        <argument
+            android:name="lat"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="subName"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/toSearchView"
+            app:destination="@id/geoSearchFragment"
+            app:popUpTo="@id/geoSearchFragment"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

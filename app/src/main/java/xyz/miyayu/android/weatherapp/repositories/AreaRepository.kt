@@ -8,8 +8,12 @@ object AreaRepository {
         WeatherApplication.instance.database.areaDao().getItems()
 
 
-    suspend fun insertArea(areaName: String) {
-        val area = Area(name = areaName)
+    suspend fun insertArea(areaName: String, latitude: Double, longitude: Double) {
+        val area = Area(
+            name = areaName,
+            latitude = latitude,
+            longitude = longitude
+        )
         WeatherApplication.instance.database.areaDao().insert(area)
     }
 

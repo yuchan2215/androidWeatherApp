@@ -2,6 +2,7 @@ package xyz.miyayu.android.weatherapp.views.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,7 @@ abstract class AreaListAdapter :
         fun bind(area: Area) {
             binding.apply {
                 areaName.text = area.name
+                invalidData.isVisible = area.isInvalid()
             }
         }
     }

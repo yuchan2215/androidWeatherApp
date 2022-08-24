@@ -16,9 +16,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import xyz.miyayu.android.weatherapp.R
+import xyz.miyayu.android.weatherapp.WeatherApplication
 import xyz.miyayu.android.weatherapp.databinding.WeatherResultFragmentBinding
 import xyz.miyayu.android.weatherapp.model.entity.Area
-import xyz.miyayu.android.weatherapp.network.json.Weather
+import xyz.miyayu.android.weatherapp.network.json.weather.Weather
 import xyz.miyayu.android.weatherapp.utils.ErrorStatus
 import xyz.miyayu.android.weatherapp.utils.Response
 import xyz.miyayu.android.weatherapp.viewmodel.WeatherViewModel
@@ -35,7 +36,7 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
     private val binding get() = _binding!!
 
     private lateinit var googleMap: GoogleMap
-    private val area: Area by lazy { Area(args.areaId, args.areaName) }
+    private val area: Area by lazy { Area(args.areaId, args.areaName, null, null) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,10 +95,10 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
         viewModel.status.observe(viewLifecycleOwner) {
             setAllGone(binding)
             when (val status = it) {
-                is Response.Loading -> {
+                is Response.Loading<*> -> {
                     loadingBind(binding)
                 }
-                is Response.ErrorResponse -> {
+                is Response.ErrorResponse<*> -> {
                     errorBind(binding, status.errorStatus)
                 }
                 is Response.SuccessResponse<*> -> {
@@ -118,7 +119,10 @@ class WeatherResultFragment : Fragment(R.layout.weather_result_fragment), OnMapR
         googleMap = map.apply {
             try {
                 val mapStyle =
-                    MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json)
+                    MapStyleOptions.loadRawResourceStyle(
+                        WeatherApplication.instance.applicationContext,
+                        R.raw.style_json
+                    )
                 setMapStyle(mapStyle)
             } catch (e: Throwable) {
             }

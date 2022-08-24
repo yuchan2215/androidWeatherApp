@@ -1,5 +1,7 @@
 package xyz.miyayu.android.weatherapp.views.fragments
 
+import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -20,11 +22,19 @@ import xyz.miyayu.android.weatherapp.views.adapters.AreaListAdapter
 class TopFragment : Fragment(R.layout.top_fragment) {
     private lateinit var viewModel: TopFragmentViewModel
 
+    private var _adapter: AreaListAdapter? = null
+    private val adapter get() = _adapter!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val viewModelFactory = TopFragmentViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[TopFragmentViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        _adapter = null
+        super.onDestroyView()
     }
 
     /**
@@ -38,8 +48,13 @@ class TopFragment : Fragment(R.layout.top_fragment) {
         }
 
         // 地域一覧のアダプター
-        val listAdapter = object : AreaListAdapter() {
+        _adapter = object : AreaListAdapter() {
             override fun onItemClicked(area: Area) {
+                //無効ならダイアログを表示する
+                if (area.isInvalid()) {
+                    showInvalidDialog(requireContext())
+                    return
+                }
                 view.findNavController()
                     .navigate(
                         TopFragmentDirections.actionTopFragmentToWeatherResult(
@@ -51,7 +66,7 @@ class TopFragment : Fragment(R.layout.top_fragment) {
         }
 
         binding.areaRecyclerView.apply {
-            adapter = listAdapter
+            this.adapter = this@TopFragment.adapter
             layoutManager = LinearLayoutManager(this@TopFragment.context)
             //項目ごとに区切り線を入れる。
             addItemDecoration(
@@ -59,7 +74,15 @@ class TopFragment : Fragment(R.layout.top_fragment) {
             )
         }
         viewModel.areaList.observe(viewLifecycleOwner) { itemList ->
-            listAdapter.submitList(itemList)
+            adapter.submitList(itemList)
         }
+    }
+
+    private fun showInvalidDialog(context: Context) {
+        AlertDialog.Builder(context)
+            .setTitle(R.string.invalid_title)
+            .setMessage(R.string.invalid_message)
+            .setPositiveButton(R.string.close) { _, _ -> }
+            .show()
     }
 }

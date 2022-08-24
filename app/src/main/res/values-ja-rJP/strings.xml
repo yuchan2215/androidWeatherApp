@@ -29,4 +29,9 @@
     <string name="area_check_error_message">サーバーとの通信に失敗したため、地域が存在するかの確認ができませんでした。</string>
     <string name="area_check_notfound_message">その地域はサーバー上に存在しません。</string>
     <string name="delete">削除</string>
+    <string name="geo_founded">%d 件見つかりました</string>
+    <string name="invalid">無効</string>
+    <string name="invalid_message">仕様変更により、このアイテムは無効になりました。再度追加してください。</string>
+    <string name="invalid_title">無効</string>
+    <string name="close">閉じる</string>
 </resources>

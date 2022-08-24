@@ -3,7 +3,8 @@ package xyz.miyayu.android.weatherapp.network
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
-import xyz.miyayu.android.weatherapp.network.json.Weather
+import xyz.miyayu.android.weatherapp.network.json.direct.Direct
+import xyz.miyayu.android.weatherapp.network.json.weather.Weather
 import java.util.*
 
 interface WeatherApiService {
@@ -13,6 +14,13 @@ interface WeatherApiService {
         @Query("q") query: String,
         @Query("lang") lang: String = getLang()
     ): Response<Weather>
+
+    @GET("geo/1.0/direct")
+    suspend fun getAreas(
+        @Query("appid") apiKey: String,
+        @Query("q") areaName: String,
+        @Query("limit") limit: String = "5"
+    ): Response<List<Direct>>
 
     companion object {
         fun getLang(): String {
